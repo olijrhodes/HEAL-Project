@@ -230,7 +230,7 @@ if last_value == "59" and min_string.get() == "0":
 #    min_string.set(int(min_string.get()) + 1 if min_string.get() != "59" else 0)
 if last_value == "59":
     hour_string.set(int(hour_string.get()) + 1 if hour_string.get() != "23" else 0)
-    last_value_sec = sec_hour.get()
+
 
 fone = Frame(ws)
 ftwo = Frame(ws)
