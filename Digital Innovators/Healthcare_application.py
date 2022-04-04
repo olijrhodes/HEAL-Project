@@ -3,7 +3,7 @@ import pandas as pd
 from win10toast import ToastNotifier
 import time
 import string
-import random
+
 
 CREAM = "mint cream"  # setting constant variables(background and foreground)
 BLUE = "Cyan4"
