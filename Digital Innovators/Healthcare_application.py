@@ -4,6 +4,7 @@ from win10toast import ToastNotifier
 import time
 import string
 import random
+from tkcalendar import *
 
 CREAM = "mint cream"  # setting constant variables(background and foreground)
 BLUE = "Cyan4"
@@ -12,7 +13,7 @@ BLACK = "Black"
 
 notifier = ToastNotifier()
 
-dataframe = pd.read_csv("MOCK_DATA.csv")
+dataframe = pd.read_csv("MOCK_DATA.csv", on_bad_lines='skip')
 
 login_window = Tk()  # creating main window
 login_window.geometry("1100x600")  # setting the windows size, resizable, title and starting background
@@ -47,6 +48,13 @@ login1_window.resizable(False, False)
 login1_window.title("Healthcare Application - Login")
 login1_window.config(bg=BLUE)
 login1_window.withdraw()
+
+ws = Toplevel()
+ws.resizable(False, False)
+ws.title("Healthcare Application - Booking")
+ws.geometry("500x400")
+ws.config(bg=BLUE)
+ws.withdraw()
 
 login1_background_frame = Frame(login1_window, height=560, width=400, bg=CREAM)
 login1_background_frame.pack(pady=20)
@@ -180,9 +188,127 @@ login_enter.grid(row=3, column=0, columnspan=2, pady=(5, 0))
 login_option = Button(login_frame, text="Already have account? Login", command=show_login_page)
 login_option.place(x=150, y=500)
 
+
+def show_booking_page():
+    ws.deiconify()
+    main.withdraw()
+
+
 # Main Window
-booking_header_btn = Button(header_frame, bg=CREAM, text="Booking", height=2, width=20)
+
+
+booking_header_btn = Button(header_frame, bg=CREAM, text="Booking", height=2, width=20, command=show_booking_page)
 booking_header_btn.grid(row=0, column=0, padx=45, pady=10)
+
+hour_string = StringVar()
+min_string = StringVar()
+# last_value_sec = ""
+last_value = ""
+f = ('Times', 20)
+
+def booking_back():
+    ws.withdraw()
+    main.deiconify()
+
+booking_back_btn = Button(ws, text="<--", command=booking_back)
+booking_back_btn.place(x=0, y=0)
+
+def display_msg():
+    date = cal.get_date()
+    m = min_sb.get()
+    h = sec_hour.get()
+    # s = sec.get()
+    t = f"Your appointment is booked for {date} at {m}:{h}."
+    msg_display.config(text=t)
+
+
+if last_value == "59" and min_string.get() == "0":
+    hour_string.set(int(hour_string.get()) + 1 if hour_string.get() != "23" else 0)
+    last_value = min_string.get()
+
+# if last_value_sec == "59" and sec_hour.get() == "0":
+#    min_string.set(int(min_string.get()) + 1 if min_string.get() != "59" else 0)
+if last_value == "59":
+    hour_string.set(int(hour_string.get()) + 1 if hour_string.get() != "23" else 0)
+    last_value_sec = sec_hour.get()
+
+fone = Frame(ws)
+ftwo = Frame(ws)
+
+fone.pack(pady=10)
+ftwo.pack(pady=10)
+
+cal = Calendar(
+    fone,
+    selectmode="day",
+    year=2022,
+    month=4,
+    day=4
+)
+cal.pack()
+
+min_sb = Spinbox(
+    ftwo,
+    from_=0,
+    to=23,
+    wrap=True,
+    textvariable=hour_string,
+    width=2,
+    state="readonly",
+    font=f,
+    justify=CENTER
+)
+sec_hour = Spinbox(
+    ftwo,
+    from_=0,
+    to=59,
+    wrap=True,
+    textvariable=min_string,
+    font=f,
+    width=2,
+    justify=CENTER
+)
+
+'''sec = Spinbox(
+    ftwo,
+    from_=0,
+    to=59,
+    wrap=True,
+    textvariable=sec_hour,
+    width=2,
+    font=f,
+    justify=CENTER,
+    bg=BLUE
+)'''
+
+min_sb.pack(side=LEFT, fill=X, expand=True)
+sec_hour.pack(side=LEFT, fill=X, expand=True)
+# sec.pack(side=LEFT, fill=X, expand=True)
+
+msg = Label(
+    ws,
+    text="Hour  Minute",
+    font=("Times", 12),
+    bg=BLUE
+)
+msg.pack(side=TOP)
+
+actionBtn = Button(
+    ws,
+    text="Book Appointment",
+    padx=10,
+    pady=10,
+    command=display_msg
+)
+actionBtn.pack(pady=10)
+
+msg_display = Label(
+    ws,
+    text="",
+    bg=BLUE
+)
+msg_display.pack(pady=10)
+
 medication_header_btn = Button(header_frame, bg=CREAM, text="Medication", height=2, width=20)
 medication_header_btn.grid(row=0, column=1, padx=45, pady=10)
 
@@ -214,8 +340,14 @@ password_entry.bind("<FocusOut>", on_leave_password)
 
 
 def login_confirm():
-    if email_entry.get() in dataframe["email"] and password_entry.get() in dataframe["password"]:
-        print("access granted")
+    searching = dataframe.loc[dataframe["email"] == email_entry.get()]
+    index = searching.index
+    Password = dataframe["password"]
+    if str(Password[index].item()) == str(password_entry.get()):
+        login1_window.withdraw()
+        main.deiconify()
+    else:
+        print("Access denied")
 
 
 login1_confirm = Button(login1_details_Frame, text="Confirm", command=login_confirm)
@@ -275,3 +407,4 @@ accessButton.grid(row=1, column=0)
 main.mainloop()  # mainloop the main window
 login_window.mainloop()
 setting_window.mainloop()
+ws.mainloop()
