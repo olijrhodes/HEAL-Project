@@ -12,6 +12,8 @@ BLACK = "Black"
 
 notifier = ToastNotifier()
 
+dataframe = pd.read_csv("MOCK_DATA.csv")
+
 login_window = Tk()  # creating main window
 login_window.geometry("1100x600")  # setting the windows size, resizable, title and starting background
 login_window.resizable(False, False)
@@ -94,7 +96,6 @@ def setting_btn_off():
 
 
 def check_login_details():
-    dataframe = pd.read_csv("MOCK_DATA.csv")
     searching = dataframe.loc[dataframe["first_name"] + dataframe["last_name"] == firstname.get() + lastname.get()]
     index = searching.index
     print(index)
@@ -213,7 +214,9 @@ password_entry.bind("<FocusOut>", on_leave_password)
 
 
 def login_confirm():
-    pass
+    if email_entry.get() in dataframe["email"] and password_entry.get() in dataframe["password"]:
+        print("access granted")
+
 
 login1_confirm = Button(login1_details_Frame, text="Confirm", command=login_confirm)
 login1_confirm.grid(row=1, column=0, columnspan=2, pady=(10, 300))
