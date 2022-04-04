@@ -3,7 +3,7 @@ import pandas as pd
 from win10toast import ToastNotifier
 import time
 import string
-
+import random
 
 CREAM = "mint cream"  # setting constant variables(background and foreground)
 BLUE = "Cyan4"
@@ -63,6 +63,16 @@ header_frame = Frame(main, bg=BLUE)
 header_frame.grid(row=0)
 
 
+def on_enter():
+    email_entry.delete(0, "end")
+
+
+def on_leave():
+    username = email_entry.get()
+    if username == "":
+        email_entry.insert(0, "Email")
+
+
 def setting_btn_on():
     main.withdraw()
     setting_window.deiconify()
@@ -100,7 +110,8 @@ def check_login_details():
             for i in range(length):
                 password.append(random.choice(characters))
             random.shuffle(password)
-            dataframe.loc[dataframe[dataframe["first_name"] + dataframe["last_name"] == firstname.get() + lastname.get()].index.values, "password"] = "".join(password)
+            dataframe.loc[dataframe[dataframe["first_name"] + dataframe[
+                "last_name"] == firstname.get() + lastname.get()].index.values, "password"] = "".join(password)
             dataframe.to_csv("MOCK_DATA.csv")
 
         else:
@@ -176,9 +187,11 @@ setting_btn.grid(row=0, column=4, padx=45, pady=10)
 
 # first time login page
 
-email_entry = Entry(login1_details_Frame)
+email_entry = Entry(login1_details_Frame, fg="Black", bg="White", font=("Microsoft YaHei UI Light", 11), bd=0)
 email_entry.grid(row=0, column=0, pady=(100, 0))
 email_entry.insert(0, "Email")
+email_entry.bind("<FocusIn>", on_enter)
+email_entry.bind("<FocusOut>", on_leave)
 password_entry = Entry(login1_details_Frame)
 password_entry.grid(row=0, column=1, pady=(100, 0))
 password_entry.insert(0, "Password")
