@@ -12,6 +12,8 @@ BLACK = "Black"
 
 notifier = ToastNotifier()
 
+dataframe = pd.read_csv("MOCK_DATA.csv")
+
 login_window = Tk()  # creating main window
 login_window.geometry("1100x600")  # setting the windows size, resizable, title and starting background
 login_window.resizable(False, False)
@@ -63,14 +65,24 @@ header_frame = Frame(main, bg=BLUE)
 header_frame.grid(row=0)
 
 
-def on_enter():
+def on_enter_email(e):
     email_entry.delete(0, "end")
 
 
-def on_leave():
+def on_leave_email(e):
     username = email_entry.get()
     if username == "":
         email_entry.insert(0, "Email")
+
+
+def on_enter_password(e):
+    password_entry.delete(0, "end")
+
+
+def on_leave_password(e):
+    password = password_entry.get()
+    if password == "":
+        password_entry.insert(0, "Password")
 
 
 def setting_btn_on():
@@ -84,7 +96,6 @@ def setting_btn_off():
 
 
 def check_login_details():
-    dataframe = pd.read_csv("MOCK_DATA.csv")
     searching = dataframe.loc[dataframe["first_name"] + dataframe["last_name"] == firstname.get() + lastname.get()]
     index = searching.index
     print(index)
@@ -190,13 +201,24 @@ setting_btn.grid(row=0, column=4, padx=45, pady=10)
 email_entry = Entry(login1_details_Frame, fg="Black", bg="White", font=("Microsoft YaHei UI Light", 11), bd=0)
 email_entry.grid(row=0, column=0, pady=(100, 0))
 email_entry.insert(0, "Email")
-email_entry.bind("<FocusIn>", on_enter)
-email_entry.bind("<FocusOut>", on_leave)
-password_entry = Entry(login1_details_Frame)
+
+email_entry.bind("<FocusIn>", on_enter_email)
+email_entry.bind("<FocusOut>", on_leave_email)
+
+password_entry = Entry(login1_details_Frame, fg="Black", bg="White", font=("Microsoft YaHei UI Light", 11), bd=0)
 password_entry.grid(row=0, column=1, pady=(100, 0))
 password_entry.insert(0, "Password")
 
-login1_confirm = Button(login1_details_Frame, text="Confirm")
+password_entry.bind("<FocusIn>", on_enter_password)
+password_entry.bind("<FocusOut>", on_leave_password)
+
+
+def login_confirm():
+    if email_entry.get() in dataframe["email"] and password_entry.get() in dataframe["password"]:
+        print("access granted")
+
+
+login1_confirm = Button(login1_details_Frame, text="Confirm", command=login_confirm)
 login1_confirm.grid(row=1, column=0, columnspan=2, pady=(10, 300))
 
 # Settings Page
