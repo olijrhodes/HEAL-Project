@@ -213,7 +213,7 @@ password_entry.bind("<FocusOut>", on_leave_password)
 
 
 def login_confirm():
-
+    pass
 
 login1_confirm = Button(login1_details_Frame, text="Confirm", command=login_confirm)
 login1_confirm.grid(row=1, column=0, columnspan=2, pady=(10, 300))
