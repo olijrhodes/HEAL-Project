@@ -218,9 +218,10 @@ def login_confirm():
     index = searching.index
     Password = dataframe["password"]
     if str(Password[index].item()) == str(password_entry.get()):
-        print("access granted")
+        login1_window.withdraw()
+        main.deiconify()
     else:
-        print(email_entry.get() + " " + password_entry.get() + " " + "failed")
+        print("Access denied")
 
 
 login1_confirm = Button(login1_details_Frame, text="Confirm", command=login_confirm)
