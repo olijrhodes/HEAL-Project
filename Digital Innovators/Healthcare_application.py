@@ -195,6 +195,8 @@ def show_booking_page():
 
 
 # Main Window
+
+
 booking_header_btn = Button(header_frame, bg=CREAM, text="Booking", height=2, width=20, command=show_booking_page)
 booking_header_btn.grid(row=0, column=0, padx=45, pady=10)
 
@@ -204,6 +206,12 @@ min_string = StringVar()
 last_value = ""
 f = ('Times', 20)
 
+def booking_back():
+    ws.withdraw()
+    main.deiconify()
+
+booking_back_btn = Button(ws, text="<--", command=booking_back)
+booking_back_btn.place(x=0, y=0)
 
 def display_msg():
     date = cal.get_date()
