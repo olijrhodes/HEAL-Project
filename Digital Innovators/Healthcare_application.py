@@ -75,7 +75,8 @@ header_frame.grid(row=0)
 
 
 def on_enter_email(e):
-    email_entry.delete(0, "end")
+    if email_entry.get() == "Email":
+        email_entry.delete(0, "end")
 
 
 def on_leave_email(e):
@@ -85,13 +86,16 @@ def on_leave_email(e):
 
 
 def on_enter_password(e):
-    password_entry.delete(0, "end")
+    if password_entry.get() == "Password":
+        password_entry.delete(0, "end")
+        password_entry.config(show="*")
 
 
 def on_leave_password(e):
     password = password_entry.get()
     if password == "":
         password_entry.insert(0, "Password")
+        password_entry.config(show="")
 
 
 def setting_btn_on():
@@ -322,7 +326,9 @@ email_entry.insert(0, "Email")
 email_entry.bind("<FocusIn>", on_enter_email)
 email_entry.bind("<FocusOut>", on_leave_email)
 
-password_entry = Entry(second_login_details_Frame, fg="Black", bg="White", font=("Microsoft YaHei UI Light", 11), bd=0)
+password_entry = Entry(second_login_details_Frame, show="", fg="Black", bg="White",
+                       font=("Microsoft YaHei UI Light", 11), bd=0)
+
 password_entry.grid(row=0, column=1, pady=(100, 0))
 password_entry.insert(0, "Password")
 
@@ -334,11 +340,14 @@ def login_confirm():
     searching = dataframe.loc[dataframe["email"] == email_entry.get()]
     index = searching.index
     Password = dataframe["password"]
-    if str(Password[index].item()) == str(password_entry.get()):
-        second_login_window.withdraw()
-        main.deiconify()
-    else:
-        print("Access denied")
+    try:
+        if str(Password[index].item()) == str(password_entry.get()):
+            second_login_window.withdraw()
+            main.deiconify()
+        else:
+            print("Incorrect email/password")
+    except ValueError:
+        print("Incorrect email/password")
 
 
 second_login_confirm = Button(second_login_details_Frame, text="Confirm", command=login_confirm)
