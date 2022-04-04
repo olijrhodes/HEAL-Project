@@ -16,7 +16,7 @@ notifier = ToastNotifier()
 dataframe = pd.read_csv("MOCK_DATA.csv", on_bad_lines='skip')
 
 login_window = Tk()  # creating main window
-login_window.geometry("1100x600")  # setting the windows size, resizable, title and starting background
+login_window.geometry("1100x600")  # setting the windobooking_window size, resizable, title and starting background
 login_window.resizable(False, False)
 login_window.title("Healthcare Application - First Time Login")
 login_window.config(bg=BLUE)
@@ -29,7 +29,7 @@ login_details_Frame = Frame(login_frame, width=400, height=300, bg=CREAM)
 login_details_Frame.pack(pady=(0, 175))
 
 main = Toplevel()  # creating main window
-main.geometry("1100x600")  # setting the windows size, resizable, title and starting background
+main.geometry("1100x600")  # setting the windobooking_window size, resizable, title and starting background
 main.resizable(False, False)
 main.title("Healthcare Application - Home")
 main.config(bg=BLUE)
@@ -42,26 +42,27 @@ setting_window.title("Healthcare Application - Settings")
 setting_window.config(bg=BLUE)
 setting_window.withdraw()
 
-login1_window = Toplevel()  # creating main window
-login1_window.geometry("1100x600")  # setting the windows size, resizable, title and starting background
-login1_window.resizable(False, False)
-login1_window.title("Healthcare Application - Login")
-login1_window.config(bg=BLUE)
-login1_window.withdraw()
+second_login_window = Toplevel()  # creating main window
+second_login_window.geometry(
+    "1100x600")  # setting the windobooking_window size, resizable, title and starting background
+second_login_window.resizable(False, False)
+second_login_window.title("Healthcare Application - Login")
+second_login_window.config(bg=BLUE)
+second_login_window.withdraw()
 
-ws = Toplevel()
-ws.resizable(False, False)
-ws.title("Healthcare Application - Booking")
-ws.geometry("500x400")
-ws.config(bg=BLUE)
-ws.withdraw()
+booking_window = Toplevel()
+booking_window.resizable(False, False)
+booking_window.title("Healthcare Application - Booking")
+booking_window.geometry("500x400")
+booking_window.config(bg=BLUE)
+booking_window.withdraw()
 
-login1_background_frame = Frame(login1_window, height=560, width=400, bg=CREAM)
-login1_background_frame.pack(pady=20)
-login1_logo_frame = Frame(login1_background_frame, width=400, bg=CREAM)
-login1_logo_frame.pack(pady=10)
-login1_details_Frame = Frame(login1_background_frame, width=400, bg=CREAM)
-login1_details_Frame.pack()
+second_login_background_frame = Frame(second_login_window, height=560, width=400, bg=CREAM)
+second_login_background_frame.pack(pady=20)
+second_login_logo_frame = Frame(second_login_background_frame, width=400, bg=CREAM)
+second_login_logo_frame.pack(pady=10)
+second_login_details_Frame = Frame(second_login_background_frame, width=400, bg=CREAM)
+second_login_details_Frame.pack()
 
 checkInt = IntVar()  # creating the check button's integer variable to live update the value
 checkInt.set(0)  # setting the IntVar to 0 by default
@@ -149,7 +150,7 @@ def check_login_details():
 
 
 def show_login_page():
-    login1_window.deiconify()
+    second_login_window.deiconify()
     login_window.withdraw()
 
 
@@ -158,9 +159,9 @@ login_logo = PhotoImage(file="App Logo.png")
 login_logo_label = Label(login_logo_frame, image=login_logo)
 login_logo_label.pack(padx=125, pady=20)
 
-login1_logo = PhotoImage(file="App Logo.png")
-login1_logo_label = Label(login1_logo_frame, image=login1_logo)
-login1_logo_label.pack(padx=125, pady=20)
+second_login_logo = PhotoImage(file="App Logo.png")
+second_login_logo_label = Label(second_login_logo_frame, image=second_login_logo)
+second_login_logo_label.pack(padx=125, pady=20)
 
 firstname = Entry(login_details_Frame)
 firstname.insert(0, "Firstname")
@@ -190,7 +191,7 @@ login_option.place(x=150, y=500)
 
 
 def show_booking_page():
-    ws.deiconify()
+    booking_window.deiconify()
     main.withdraw()
 
 
@@ -200,18 +201,21 @@ def show_booking_page():
 booking_header_btn = Button(header_frame, bg=CREAM, text="Booking", height=2, width=20, command=show_booking_page)
 booking_header_btn.grid(row=0, column=0, padx=45, pady=10)
 
-hour_string = StringVar()
-min_string = StringVar()
+hour_string = IntVar()
+min_string = IntVar()
 # last_value_sec = ""
 last_value = ""
 f = ('Times', 20)
 
+
 def booking_back():
-    ws.withdraw()
+    booking_window.withdraw()
     main.deiconify()
 
-booking_back_btn = Button(ws, text="<--", command=booking_back)
+
+booking_back_btn = Button(booking_window, text="<--", command=booking_back)
 booking_back_btn.place(x=0, y=0)
+
 
 def display_msg():
     date = cal.get_date()
@@ -231,9 +235,8 @@ if last_value == "59" and min_string.get() == "0":
 if last_value == "59":
     hour_string.set(int(hour_string.get()) + 1 if hour_string.get() != "23" else 0)
 
-
-fone = Frame(ws)
-ftwo = Frame(ws)
+fone = Frame(booking_window)
+ftwo = Frame(booking_window)
 
 fone.pack(pady=10)
 ftwo.pack(pady=10)
@@ -269,24 +272,12 @@ sec_hour = Spinbox(
     justify=CENTER
 )
 
-'''sec = Spinbox(
-    ftwo,
-    from_=0,
-    to=59,
-    wrap=True,
-    textvariable=sec_hour,
-    width=2,
-    font=f,
-    justify=CENTER,
-    bg=BLUE
-)'''
-
 min_sb.pack(side=LEFT, fill=X, expand=True)
 sec_hour.pack(side=LEFT, fill=X, expand=True)
 # sec.pack(side=LEFT, fill=X, expand=True)
 
 msg = Label(
-    ws,
+    booking_window,
     text="Hour  Minute",
     font=("Times", 12),
     bg=BLUE
@@ -294,7 +285,7 @@ msg = Label(
 msg.pack(side=TOP)
 
 actionBtn = Button(
-    ws,
+    booking_window,
     text="Book Appointment",
     padx=10,
     pady=10,
@@ -303,7 +294,7 @@ actionBtn = Button(
 actionBtn.pack(pady=10)
 
 msg_display = Label(
-    ws,
+    booking_window,
     text="",
     bg=BLUE
 )
@@ -324,14 +315,14 @@ setting_btn.grid(row=0, column=4, padx=45, pady=10)
 
 # first time login page
 
-email_entry = Entry(login1_details_Frame, fg="Black", bg="White", font=("Microsoft YaHei UI Light", 11), bd=0)
+email_entry = Entry(second_login_details_Frame, fg="Black", bg="White", font=("Microsoft YaHei UI Light", 11), bd=0)
 email_entry.grid(row=0, column=0, pady=(100, 0))
 email_entry.insert(0, "Email")
 
 email_entry.bind("<FocusIn>", on_enter_email)
 email_entry.bind("<FocusOut>", on_leave_email)
 
-password_entry = Entry(login1_details_Frame, fg="Black", bg="White", font=("Microsoft YaHei UI Light", 11), bd=0)
+password_entry = Entry(second_login_details_Frame, fg="Black", bg="White", font=("Microsoft YaHei UI Light", 11), bd=0)
 password_entry.grid(row=0, column=1, pady=(100, 0))
 password_entry.insert(0, "Password")
 
@@ -344,14 +335,14 @@ def login_confirm():
     index = searching.index
     Password = dataframe["password"]
     if str(Password[index].item()) == str(password_entry.get()):
-        login1_window.withdraw()
+        second_login_window.withdraw()
         main.deiconify()
     else:
         print("Access denied")
 
 
-login1_confirm = Button(login1_details_Frame, text="Confirm", command=login_confirm)
-login1_confirm.grid(row=1, column=0, columnspan=2, pady=(10, 300))
+second_login_confirm = Button(second_login_details_Frame, text="Confirm", command=login_confirm)
+second_login_confirm.grid(row=1, column=0, columnspan=2, pady=(10, 300))
 
 # Settings Page
 
@@ -370,31 +361,33 @@ def ContrastCheck():  # checking whether to change the accessibility options
         contrastMode.set("High Contrast Mode [off]")
 
 
+windows = [main, header_frame, login_window, login_frame, login_logo_frame, login_details_Frame,
+           setting_window, second_login_window, booking_window, second_login_background_frame,
+           second_login_logo_frame, second_login_details_Frame, fone, ftwo]
+
+widgets = [booking_header_btn,
+           medication_header_btn, prescriptions_header_btn,
+           after_app_chat, setting_btn, settings_back_btn,
+           firstname, lastname, address, postcode, healthnumber,
+           login_enter, login_option, login_logo_label, second_login_logo_label,
+           login_enter, login_option, booking_back_btn, min_sb, sec_hour,
+           msg, actionBtn, msg_display, second_login_confirm]
+
+
 def HighContrast():  # creating a block to change the background to black and the foreground to yellow
-    windows = [main, header_frame]
     for window in windows:
         window.config(bg=BLACK)
         setting_window.config(bg=BLACK)
 
-    widgets = [accessButton, booking_header_btn,
-               medication_header_btn, prescriptions_header_btn,
-               after_app_chat, setting_btn, settings_back_btn,
-               firstname, lastname, address, postcode, healthnumber,
-               login_enter, login_option]
     for widget in widgets:
         widget.configure(bg="Yellow")
 
 
 def LowContrast():  # creating a block to change the background to blue and the foreground to cream
-    windows = [main, header_frame, login1_window, login_frame, login_window,
-               login_logo_frame, login_details_Frame]
     for window in windows:
         window.config(bg=BLUE)
         setting_window.config(bg=BLUE)
 
-    widgets = [accessButton, booking_header_btn,
-               medication_header_btn, prescriptions_header_btn,
-               after_app_chat, setting_btn, settings_back_btn]
     for widget in widgets:
         widget.configure(bg=CREAM)
 
@@ -406,5 +399,6 @@ accessButton.grid(row=1, column=0)
 
 main.mainloop()  # mainloop the main window
 login_window.mainloop()
+second_login_window.mainloop()
 setting_window.mainloop()
-ws.mainloop()
+booking_window.mainloop()
