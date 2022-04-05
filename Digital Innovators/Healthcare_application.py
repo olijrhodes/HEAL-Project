@@ -237,6 +237,15 @@ booking_back_btn = Button(booking_window, text="<--", command=booking_back)
 booking_back_btn.place(x=0, y=0)
 
 
+def booking_selection_back():
+    main.deiconify()
+    booking_selection.withdraw()
+
+
+booking_selection_back_btn = Button(booking_selection, text="<--", command=booking_selection_back)
+booking_selection_back_btn.place(x=0, y=0)
+
+
 def show_booking_page():
     booking_selection.withdraw()
     booking_window.deiconify()
