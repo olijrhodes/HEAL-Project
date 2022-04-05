@@ -44,8 +44,7 @@ setting_window.config(bg=BLUE)
 setting_window.withdraw()
 
 second_login_window = Toplevel()  # creating main window
-second_login_window.geometry(
-    "1100x600")  # setting the windobooking_window size, resizable, title and starting background
+second_login_window.geometry("1100x600")  # setting the windobooking_window size, resizable, title and starting background
 second_login_window.resizable(False, False)
 second_login_window.title("Healthcare Application - Login")
 second_login_window.config(bg=BLUE)
@@ -58,12 +57,13 @@ booking_window.geometry("500x400")
 booking_window.config(bg=BLUE)
 booking_window.withdraw()
 
-second_login_background_frame = Frame(second_login_window, height=560, width=400, bg=CREAM)
-second_login_background_frame.pack(pady=20)
-second_login_logo_frame = Frame(second_login_background_frame, width=400, bg=CREAM)
-second_login_logo_frame.pack(pady=10)
-second_login_details_Frame = Frame(second_login_background_frame, width=400, bg=CREAM)
-second_login_details_Frame.pack()
+prescription_window = Tk()
+prescription_window.resizable(False, False)
+prescription_window.title("Healthcare Application - Prescriptions")
+prescription_window.geometry("1100x600")
+prescription_window.config(bg=BLUE)
+prescription_window.withdraw()
+
 
 checkInt = IntVar()  # creating the check button's integer variable to live update the value
 checkInt.set(0)  # setting the IntVar to 0 by default
@@ -310,26 +310,20 @@ msg_display = Label(
 )
 msg_display.pack(pady=10)
 
-def prescription_tab():
-    prescription_window = Tk()
-    prescription_window.geometry("1100x600")
-    prescription_window.resizable(False, False)
-    prescription_window.title("Healthcare Application - Prescriptions")
+listbox = Listbox(prescription_window, width=100, height=46, bg="white")
+listbox.place(x=50, y=155, width=500, height=400)
 
-    BLUE = "cyan4"
-    prescription_window.config(bg=BLUE)
-    prescription_dataframe = pd.read_csv("MOCK_DATA.csv")
+booking_back_btn = Button(booking_window, text="<--", command=booking_back)
+booking_back_btn.place(x=0, y=0)
 
-    listbox = Listbox(prescription_window, width=100, height=46, bg="white")
-    listbox.place(x=50, y=155, width=500, height=400)
-
-    searching = prescription_dataframe.loc[prescription_dataframe["email"] == email_entry.get()]
+def prescription_window():
+    searching = dataframe.loc[dataframe["email"] == email_entry.get()]
     index = searching.index
 
-    First = prescription_dataframe["first_name"]
+    First = dataframe["first_name"]
     first_name = First[index].item()
 
-    Surname = prescription_dataframe["last_name"]
+    Surname = dataframe["last_name"]
     sur_name = Surname[index].item()
 
     name = "Showing medication for " + first_name + " " + sur_name
@@ -337,18 +331,31 @@ def prescription_tab():
     nameLabel.place(x=50, y=50)
     nameLabel.config(text=name)
 
-    Medication = prescription_dataframe["med1"]
-    dataframe.med1.str.split(pat="\n", expand=True)
-    for item in Medication[index]:
+
+    Medication = dataframe["med1"]
+    medication = Medication[index].item()
+    str_medication = str(medication)
+    split_medication = str_medication.split(',')
+    print(str_medication)
+    print(split_medication)
+    for item in split_medication:
         listbox.insert("end", item)
 
     prescription_window.mainloop()
+
+def prescription_back():
+    prescription_window.withdraw()
+    main.deiconify()
+
+
+prescription_back_btn = Button(prescription_window, text="<--", command=prescription_back)
+prescription_back_btn.place(x=0, y=0)
 
 
 medication_header_btn = Button(header_frame, bg=CREAM, text="Medication", height=2, width=20)
 medication_header_btn.grid(row=0, column=1, padx=45, pady=10)
 
-prescriptions_header_btn = Button(header_frame, bg=CREAM, text="prescriptions", height=2, width=20,command=prescription_tab)
+prescriptions_header_btn = Button(header_frame, bg=CREAM, text="prescriptions", height=2, width=20,command=prescription_window)
 prescriptions_header_btn.grid(row=0, column=2, padx=45, pady=10)
 
 after_app_chat = Button(header_frame, bg=CREAM, text="After Appointment Chat", height=2, width=20)
