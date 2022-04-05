@@ -7,6 +7,8 @@ import random
 from tkcalendar import *
 import datetime
 
+selected_font = ("Microsoft YaHei UI Light", 11)
+
 CREAM = "mint cream"  # setting constant variables(background and foreground)
 BLUE = "Cyan4"
 YELLOW = "Yellow2"
@@ -168,30 +170,30 @@ second_login_logo = PhotoImage(file="App Logo.png")
 second_login_logo_label = Label(second_login_logo_frame, image=second_login_logo)
 second_login_logo_label.pack(padx=125, pady=20)
 
-firstname = Entry(login_details_Frame)
+firstname = Entry(login_details_Frame, font=selected_font)
 firstname.insert(0, "Firstname")
 firstname.grid(row=0, column=0, pady=(0, 10), padx=(0, 10))
 
-lastname = Entry(login_details_Frame)
+lastname = Entry(login_details_Frame, font=selected_font)
 lastname.insert(0, "Lastname")
 lastname.grid(row=0, column=1, pady=(0, 10), padx=(10, 0))
 
-address = Entry(login_details_Frame)
+address = Entry(login_details_Frame, font=selected_font)
 address.insert(0, "Address")
 address.grid(row=1, column=0, pady=(0, 10), padx=(0, 10))
 
-postcode = Entry(login_details_Frame)
+postcode = Entry(login_details_Frame, font=selected_font)
 postcode.insert(0, "Postcode")
 postcode.grid(row=1, column=1, pady=(0, 10), padx=(10, 0))
 
-healthnumber = Entry(login_details_Frame)
+healthnumber = Entry(login_details_Frame, font=selected_font)
 healthnumber.insert(0, "Health Number")
 healthnumber.grid(row=2, column=0, columnspan=2, pady=(0, 5))
 
-login_enter = Button(login_details_Frame, text="Enter", command=check_login_details, width=17)
+login_enter = Button(login_details_Frame, text="Enter", command=check_login_details, width=17, font=selected_font)
 login_enter.grid(row=3, column=0, columnspan=2, pady=(5, 0))
 
-login_option = Button(login_frame, text="Already have account? Login", command=show_login_page)
+login_option = Button(login_frame, text="Already have account? Login", command=show_login_page, font=selected_font)
 login_option.place(x=150, y=500)
 
 
@@ -203,14 +205,14 @@ def show_booking_page():
 # Main Window
 
 
-booking_header_btn = Button(header_frame, bg=CREAM, text="Booking", height=2, width=20, command=show_booking_page)
+booking_header_btn = Button(header_frame, bg=CREAM, text="Booking", height=2, width=20, command=show_booking_page,
+                            font=selected_font)
 booking_header_btn.grid(row=0, column=0, padx=45, pady=10)
 
 hour_string = IntVar()
 min_string = IntVar()
 # last_value_sec = ""
 last_value = ""
-f = ('Times', 20)
 
 
 def booking_back():
@@ -218,7 +220,7 @@ def booking_back():
     main.deiconify()
 
 
-booking_back_btn = Button(booking_window, text="<--", command=booking_back)
+booking_back_btn = Button(booking_window, text="<--", command=booking_back, font=selected_font)
 booking_back_btn.place(x=0, y=0)
 
 
@@ -267,7 +269,7 @@ min_sb = Spinbox(
     wrap=True,
     textvariable=hour_string,
     width=2,
-    font=f,
+    font=selected_font,
     justify=CENTER,
     bg=BLUE
 )
@@ -277,7 +279,7 @@ sec_hour = Spinbox(
     to=59,
     wrap=True,
     textvariable=min_string,
-    font=f,
+    font=selected_font,
     width=2,
     justify=CENTER
 )
@@ -289,7 +291,7 @@ sec_hour.pack(side=LEFT, fill=X, expand=True)
 msg = Label(
     booking_window,
     text="Hour  Minute",
-    font=("Times", 12),
+    font=selected_font,
     bg=BLUE
 )
 msg.pack(side=TOP)
@@ -299,7 +301,8 @@ actionBtn = Button(
     text="Book Appointment",
     padx=10,
     pady=10,
-    command=display_msg
+    command=display_msg,
+    font=selected_font
 )
 actionBtn.pack(pady=10)
 
@@ -310,16 +313,16 @@ msg_display = Label(
 )
 msg_display.pack(pady=10)
 
-medication_header_btn = Button(header_frame, bg=CREAM, text="Medication", height=2, width=20)
+medication_header_btn = Button(header_frame, bg=CREAM, text="Medication", height=2, width=20, font=selected_font)
 medication_header_btn.grid(row=0, column=1, padx=45, pady=10)
 
-prescriptions_header_btn = Button(header_frame, bg=CREAM, text="prescriptions", height=2, width=20)
+prescriptions_header_btn = Button(header_frame, bg=CREAM, text="prescriptions", height=2, width=20, font=selected_font)
 prescriptions_header_btn.grid(row=0, column=2, padx=45, pady=10)
 
-after_app_chat = Button(header_frame, bg=CREAM, text="After Appointment Chat", height=2, width=20)
+after_app_chat = Button(header_frame, bg=CREAM, text="After Appointment Chat", height=2, width=20, font=selected_font)
 after_app_chat.grid(row=0, column=3, padx=45, pady=10)
 
-setting_btn = Button(header_frame, bg=CREAM, text=u"\u2699", height=1, width=3, font=('Helvatical bold', 15),
+setting_btn = Button(header_frame, bg=CREAM, text=u"\u2699", height=1, width=3, font=selected_font,
                      command=setting_btn_on)
 setting_btn.grid(row=0, column=4, padx=45, pady=10)
 
@@ -340,15 +343,14 @@ def login_confirm(e):
         print("Incorrect email/password")
 
 
-email_entry = Entry(second_login_details_Frame, fg="Black", bg="White", font=("Microsoft YaHei UI Light", 11), bd=0)
+email_entry = Entry(second_login_details_Frame, fg="Black", bg="White", font=selected_font, bd=0)
 email_entry.grid(row=0, column=0, pady=(100, 0))
 email_entry.insert(0, "Email")
 
 email_entry.bind("<FocusIn>", on_enter_email)
 email_entry.bind("<FocusOut>", on_leave_email)
 
-password_entry = Entry(second_login_details_Frame, show="", fg="Black", bg="White",
-                       font=("Microsoft YaHei UI Light", 11), bd=0)
+password_entry = Entry(second_login_details_Frame, show="", fg="Black", bg="White", font=selected_font, bd=0)
 
 password_entry.grid(row=0, column=1, pady=(100, 0))
 password_entry.insert(0, "Password")
@@ -357,12 +359,12 @@ password_entry.bind("<FocusIn>", on_enter_password)
 password_entry.bind("<FocusOut>", on_leave_password)
 password_entry.bind("<Return>", login_confirm)
 
-second_login_confirm = Button(second_login_details_Frame, text="Confirm", command=login_confirm)
+second_login_confirm = Button(second_login_details_Frame, text="Confirm", command=login_confirm, font=selected_font)
 second_login_confirm.grid(row=1, column=0, columnspan=2, pady=(10, 300))
 
 # Settings Page
 
-settings_back_btn = Button(setting_window, text="<--", command=setting_btn_off)
+settings_back_btn = Button(setting_window, text="<--", command=setting_btn_off, font=selected_font)
 settings_back_btn.grid(row=0, column=0)
 
 
@@ -418,7 +420,7 @@ def LowContrast():  # creating a block to change the background to blue and the 
 
 accessButton = Button(main,  # generic test button
                       textvariable=contrastMode,
-                      bg=CREAM, relief=RAISED, command=ContrastCheck)
+                      bg=CREAM, relief=RAISED, command=ContrastCheck, font=selected_font)
 accessButton.grid(row=1, column=0)
 
 main.mainloop()  # mainloop the main window
