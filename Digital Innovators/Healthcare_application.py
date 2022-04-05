@@ -324,10 +324,45 @@ msg_display = Label(
 )
 msg_display.pack(pady=10)
 
+def prescription_tab():
+    prescription_window = Tk()
+    prescription_window.geometry("1100x600")
+    prescription_window.resizable(False, False)
+    prescription_window.title("Healthcare Application - Prescriptions")
+
+    BLUE = "cyan4"
+    prescription_window.config(bg=BLUE)
+    prescription_dataframe = pd.read_csv("MOCK_DATA.csv")
+
+    listbox = Listbox(prescription_window, width=100, height=46, bg="white")
+    listbox.place(x=50, y=155, width=500, height=400)
+
+    searching = prescription_dataframe.loc[prescription_dataframe["email"] == email_entry.get()]
+    index = searching.index
+
+    First = prescription_dataframe["first_name"]
+    first_name = First[index].item()
+
+    Surname = prescription_dataframe["last_name"]
+    sur_name = Surname[index].item()
+
+    name = "Showing medication for " + first_name + " " + sur_name
+    nameLabel = Label(prescription_window, bg='cyan4', fg='white', font=("Verdana", 17))
+    nameLabel.place(x=50, y=50)
+    nameLabel.config(text=name)
+
+    Medication = prescription_dataframe["med1"]
+    dataframe.med1.str.split(pat="\n", expand=True)
+    for item in Medication[index]:
+        listbox.insert("end", item)
+
+    prescription_window.mainloop()
+
+
 medication_header_btn = Button(header_frame, bg=CREAM, text="Medication", height=2, width=20)
 medication_header_btn.grid(row=0, column=1, padx=45, pady=10)
 
-prescriptions_header_btn = Button(header_frame, bg=CREAM, text="prescriptions", height=2, width=20)
+prescriptions_header_btn = Button(header_frame, bg=CREAM, text="prescriptions", height=2, width=20,command=prescription_tab)
 prescriptions_header_btn.grid(row=0, column=2, padx=45, pady=10)
 
 after_app_chat = Button(header_frame, bg=CREAM, text="After Appointment Chat", height=2, width=20)
@@ -338,6 +373,21 @@ setting_btn = Button(header_frame, bg=CREAM, text=u"\u2699", height=1, width=3, 
 setting_btn.grid(row=0, column=4, padx=45, pady=10)
 
 # first time login page
+
+
+def login_confirm(e):
+    searching = dataframe.loc[dataframe["email"] == email_entry.get()]
+    index = searching.index
+    Password = dataframe["password"]
+    try:
+        if str(Password[index].item()) == str(password_entry.get()):
+            second_login_window.withdraw()
+            main.deiconify()
+        else:
+            print("Incorrect email/password")
+    except ValueError:
+        print("Incorrect email/password")
+
 
 email_entry = Entry(second_login_details_Frame, fg="Black", bg="White", font=("Microsoft YaHei UI Light", 11), bd=0)
 email_entry.grid(row=0, column=0, pady=(100, 0))
@@ -354,21 +404,7 @@ password_entry.insert(0, "Password")
 
 password_entry.bind("<FocusIn>", on_enter_password)
 password_entry.bind("<FocusOut>", on_leave_password)
-
-
-def login_confirm():
-    searching = dataframe.loc[dataframe["email"] == email_entry.get()]
-    index = searching.index
-    Password = dataframe["password"]
-    try:
-        if str(Password[index].item()) == str(password_entry.get()):
-            second_login_window.withdraw()
-            main.deiconify()
-        else:
-            print("Incorrect email/password")
-    except ValueError:
-        print("Incorrect email/password")
-
+password_entry.bind("<Return>", login_confirm)
 
 second_login_confirm = Button(second_login_details_Frame, text="Confirm", command=login_confirm)
 second_login_confirm.grid(row=1, column=0, columnspan=2, pady=(10, 300))
@@ -433,6 +469,7 @@ accessButton = Button(main,  # generic test button
                       textvariable=contrastMode,
                       bg=CREAM, relief=RAISED, command=ContrastCheck)
 accessButton.grid(row=1, column=0)
+
 
 main.mainloop()  # mainloop the main window
 login_window.mainloop()
