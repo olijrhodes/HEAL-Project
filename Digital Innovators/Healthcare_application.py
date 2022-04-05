@@ -301,9 +301,8 @@ min_sb = Spinbox(
     wrap=True,
     textvariable=hour_string,
     width=2,
-    font=selected_font,
-    justify=CENTER,
-    bg=BLUE
+    font=f,
+    justify=CENTER
 )
 sec_hour = Spinbox(
     ftwo,
