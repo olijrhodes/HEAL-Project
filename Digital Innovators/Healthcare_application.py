@@ -6,7 +6,7 @@ import string
 import random
 from tkcalendar import *
 import datetime
-
+hello julian
 selected_font = ("Microsoft YaHei UI Light", 11)
 
 CREAM = "mint cream"  # setting constant variables(background and foreground)
