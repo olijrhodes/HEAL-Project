@@ -53,6 +53,13 @@ second_login_window.title("Healthcare Application - Login")
 second_login_window.config(bg=BLUE)
 second_login_window.withdraw()
 
+booking_selection = Tk()
+booking_selection.resizable(False, False)
+booking_selection.title("Healthcare Application - Booking Selection")
+booking_selection.geometry("500x400")
+booking_selection.config(bg=BLUE)
+booking_selection.withdraw()
+
 booking_window = Toplevel()
 booking_window.resizable(False, False)
 booking_window.title("Healthcare Application - Booking")
@@ -66,6 +73,13 @@ second_login_logo_frame = Frame(second_login_background_frame, width=400, bg=CRE
 second_login_logo_frame.pack(pady=10)
 second_login_details_Frame = Frame(second_login_background_frame, width=400, bg=CREAM)
 second_login_details_Frame.pack()
+
+prescription_window = Tk()
+prescription_window.resizable(False, False)
+prescription_window.title("Healthcare Application - Prescriptions")
+prescription_window.geometry("1100x600")
+prescription_window.config(bg=BLUE)
+prescription_window.withdraw()
 
 checkInt = IntVar()  # creating the check button's integer variable to live update the value
 checkInt.set(0)  # setting the IntVar to 0 by default
@@ -170,30 +184,30 @@ second_login_logo = PhotoImage(file="App Logo.png")
 second_login_logo_label = Label(second_login_logo_frame, image=second_login_logo)
 second_login_logo_label.pack(padx=125, pady=20)
 
-firstname = Entry(login_details_Frame, font=selected_font)
+firstname = Entry(login_details_Frame)
 firstname.insert(0, "Firstname")
 firstname.grid(row=0, column=0, pady=(0, 10), padx=(0, 10))
 
-lastname = Entry(login_details_Frame, font=selected_font)
+lastname = Entry(login_details_Frame)
 lastname.insert(0, "Lastname")
 lastname.grid(row=0, column=1, pady=(0, 10), padx=(10, 0))
 
-address = Entry(login_details_Frame, font=selected_font)
+address = Entry(login_details_Frame)
 address.insert(0, "Address")
 address.grid(row=1, column=0, pady=(0, 10), padx=(0, 10))
 
-postcode = Entry(login_details_Frame, font=selected_font)
+postcode = Entry(login_details_Frame)
 postcode.insert(0, "Postcode")
 postcode.grid(row=1, column=1, pady=(0, 10), padx=(10, 0))
 
-healthnumber = Entry(login_details_Frame, font=selected_font)
+healthnumber = Entry(login_details_Frame)
 healthnumber.insert(0, "Health Number")
 healthnumber.grid(row=2, column=0, columnspan=2, pady=(0, 5))
 
-login_enter = Button(login_details_Frame, text="Enter", command=check_login_details, width=17, font=selected_font)
+login_enter = Button(login_details_Frame, text="Enter", command=check_login_details, width=17)
 login_enter.grid(row=3, column=0, columnspan=2, pady=(5, 0))
 
-login_option = Button(login_frame, text="Already have account? Login", command=show_login_page, font=selected_font)
+login_option = Button(login_frame, text="Already have account? Login", command=show_login_page)
 login_option.place(x=150, y=500)
 
 
@@ -205,14 +219,14 @@ def show_booking_page():
 # Main Window
 
 
-booking_header_btn = Button(header_frame, bg=CREAM, text="Booking", height=2, width=20, command=show_booking_page,
-                            font=selected_font)
+booking_header_btn = Button(header_frame, bg=CREAM, text="Booking", height=2, width=20, command=show_booking_page)
 booking_header_btn.grid(row=0, column=0, padx=45, pady=10)
 
 hour_string = IntVar()
 min_string = IntVar()
 # last_value_sec = ""
 last_value = ""
+f = ('Times', 20)
 
 
 def booking_back():
@@ -220,7 +234,7 @@ def booking_back():
     main.deiconify()
 
 
-booking_back_btn = Button(booking_window, text="<--", command=booking_back, font=selected_font)
+booking_back_btn = Button(booking_window, text="<--", command=booking_back)
 booking_back_btn.place(x=0, y=0)
 
 
@@ -279,7 +293,7 @@ sec_hour = Spinbox(
     to=59,
     wrap=True,
     textvariable=min_string,
-    font=selected_font,
+    font=f,
     width=2,
     justify=CENTER
 )
@@ -291,7 +305,7 @@ sec_hour.pack(side=LEFT, fill=X, expand=True)
 msg = Label(
     booking_window,
     text="Hour  Minute",
-    font=selected_font,
+    font=("Times", 12),
     bg=BLUE
 )
 msg.pack(side=TOP)
@@ -301,8 +315,7 @@ actionBtn = Button(
     text="Book Appointment",
     padx=10,
     pady=10,
-    command=display_msg,
-    font=selected_font
+    command=display_msg
 )
 actionBtn.pack(pady=10)
 
@@ -313,16 +326,58 @@ msg_display = Label(
 )
 msg_display.pack(pady=10)
 
-medication_header_btn = Button(header_frame, bg=CREAM, text="Medication", height=2, width=20, font=selected_font)
+listbox = Listbox(prescription_window, width=100, height=46, bg="white")
+listbox.place(x=50, y=155, width=500, height=400)
+
+booking_back_btn = Button(booking_window, text="<--", command=booking_back)
+booking_back_btn.place(x=0, y=0)
+
+def prescription_window():
+    searching = dataframe.loc[dataframe["email"] == email_entry.get()]
+    index = searching.index
+
+    First = dataframe["first_name"]
+    first_name = First[index].item()
+
+    Surname = dataframe["last_name"]
+    sur_name = Surname[index].item()
+
+    name = "Showing medication for " + first_name + " " + sur_name
+    nameLabel = Label(prescription_window, bg='cyan4', fg='white', font=("Verdana", 17))
+    nameLabel.place(x=50, y=50)
+    nameLabel.config(text=name)
+
+
+    Medication = dataframe["med1"]
+    medication = Medication[index].item()
+    str_medication = str(medication)
+    split_medication = str_medication.split(',')
+    print(str_medication)
+    print(split_medication)
+    for item in split_medication:
+        listbox.insert("end", item)
+
+    prescription_window.mainloop()
+
+def prescription_back():
+    prescription_window.withdraw()
+    main.deiconify()
+
+
+prescription_back_btn = Button(prescription_window, text="<--", command=prescription_back)
+prescription_back_btn.place(x=0, y=0)
+
+
+medication_header_btn = Button(header_frame, bg=CREAM, text="Medication", height=2, width=20)
 medication_header_btn.grid(row=0, column=1, padx=45, pady=10)
 
-prescriptions_header_btn = Button(header_frame, bg=CREAM, text="prescriptions", height=2, width=20, font=selected_font)
+prescriptions_header_btn = Button(header_frame, bg=CREAM, text="prescriptions", height=2, width=20)
 prescriptions_header_btn.grid(row=0, column=2, padx=45, pady=10)
 
-after_app_chat = Button(header_frame, bg=CREAM, text="After Appointment Chat", height=2, width=20, font=selected_font)
+after_app_chat = Button(header_frame, bg=CREAM, text="After Appointment Chat", height=2, width=20)
 after_app_chat.grid(row=0, column=3, padx=45, pady=10)
 
-setting_btn = Button(header_frame, bg=CREAM, text=u"\u2699", height=1, width=3, font=selected_font,
+setting_btn = Button(header_frame, bg=CREAM, text=u"\u2699", height=1, width=3, font=('Helvatical bold', 15),
                      command=setting_btn_on)
 setting_btn.grid(row=0, column=4, padx=45, pady=10)
 
@@ -343,14 +398,15 @@ def login_confirm(e):
         print("Incorrect email/password")
 
 
-email_entry = Entry(second_login_details_Frame, fg="Black", bg="White", font=selected_font, bd=0)
+email_entry = Entry(second_login_details_Frame, fg="Black", bg="White", font=("Microsoft YaHei UI Light", 11), bd=0)
 email_entry.grid(row=0, column=0, pady=(100, 0))
 email_entry.insert(0, "Email")
 
 email_entry.bind("<FocusIn>", on_enter_email)
 email_entry.bind("<FocusOut>", on_leave_email)
 
-password_entry = Entry(second_login_details_Frame, show="", fg="Black", bg="White", font=selected_font, bd=0)
+password_entry = Entry(second_login_details_Frame, show="", fg="Black", bg="White",
+                       font=("Microsoft YaHei UI Light", 11), bd=0)
 
 password_entry.grid(row=0, column=1, pady=(100, 0))
 password_entry.insert(0, "Password")
@@ -359,12 +415,12 @@ password_entry.bind("<FocusIn>", on_enter_password)
 password_entry.bind("<FocusOut>", on_leave_password)
 password_entry.bind("<Return>", login_confirm)
 
-second_login_confirm = Button(second_login_details_Frame, text="Confirm", command=login_confirm, font=selected_font)
+second_login_confirm = Button(second_login_details_Frame, text="Confirm", command=login_confirm)
 second_login_confirm.grid(row=1, column=0, columnspan=2, pady=(10, 300))
 
 # Settings Page
 
-settings_back_btn = Button(setting_window, text="<--", command=setting_btn_off, font=selected_font)
+settings_back_btn = Button(setting_window, text="<--", command=setting_btn_off)
 settings_back_btn.grid(row=0, column=0)
 
 
@@ -420,7 +476,7 @@ def LowContrast():  # creating a block to change the background to blue and the 
 
 accessButton = Button(main,  # generic test button
                       textvariable=contrastMode,
-                      bg=CREAM, relief=RAISED, command=ContrastCheck, font=selected_font)
+                      bg=CREAM, relief=RAISED, command=ContrastCheck)
 accessButton.grid(row=1, column=0)
 
 main.mainloop()  # mainloop the main window
