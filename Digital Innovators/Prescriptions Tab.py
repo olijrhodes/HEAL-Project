@@ -1,48 +1,32 @@
-import pandas as pd
-from tkinter import *
+def prescription_tab():
+    prescription_window = Tk()
+    prescription_window.geometry("1100x600")
+    prescription_window.resizable(False, False)
+    prescription_window.title("Healthcare Application - Prescriptions")
 
-window = Tk()
-window.geometry("1100x600")
-window.resizable(False,False)
-window.title("Healthcare Application - Prescriptions")
+    BLUE = "cyan4"
+    prescription_window.config(bg=BLUE)
+    prescription_dataframe = pd.read_csv("MOCK_DATA.csv")
 
-BLUE = "cyan4"
-window.config(bg=BLUE)
+    listbox = Listbox(prescription_window, width=100, height=46, bg="white")
+    listbox.place(x=50, y=155, width=500, height=400)
 
-dataframe = pd.read_csv("MOCK_DATA.csv", on_bad_lines='skip')
-print(dataframe)
-var1 = StringVar()
+    searching = prescription_dataframe.loc[prescription_dataframe["email"] == email_entry.get()]
+    index = searching.index
 
-listbox = Listbox(window, width= 100, height=46, bg="white")
-listbox.place(x=50,y=155,width=500,height=400)
+    First = prescription_dataframe["first_name"]
+    first_name = First[index].item()
 
-#for index, row in dataframe.iterrows():
-    #print(index, row["med1"])
+    Surname = prescription_dataframe["last_name"]
+    sur_name = Surname[index].item()
 
-#first_name = dataframe.loc("first_name")
+    name = "Showing medication for " + first_name + " " + sur_name
+    nameLabel = Label(prescription_window, bg='cyan4', fg='white', font=("Verdana", 17))
+    nameLabel.place(x=50, y=50)
+    nameLabel.config(text=name)
 
-#meds = StringVar
-#meds = dataframe.loc[dataframe["med1"].str.contains(first_name, flags=re.I, regex=True)]
-#print(meds.to_string)
+    Medication = prescription_dataframe["med1"]
+    for item in Medication[index]:
+        listbox.insert("end", item)
 
-firstname = "Daryle"
-surname = "Playle"
-
-name = "Showing medication for " + firstname + " " + surname
-nameLabel = Label(window, bg='cyan4', fg='white', font=("Verdana", 17))
-nameLabel.place(x=50,y=50)
-nameLabel.config(text=name)
-
-searching = dataframe.loc[dataframe["first_name"] + dataframe["last_name"] == firstname + surname]  # change firstname surname .get()
-index = searching.index
-
-Medication = dataframe["med1"] #seperate medication from each other and find out how to specify items in csv are lists
-
-for med in Medication[index].item():
-    if len(med) >= 1:
-        listbox.insert("end", med)
-    else:
-        listbox.insert("end", med)
-
-
-window.mainloop()
+    prescription_window.mainloop()

@@ -310,10 +310,45 @@ msg_display = Label(
 )
 msg_display.pack(pady=10)
 
+def prescription_tab():
+    prescription_window = Tk()
+    prescription_window.geometry("1100x600")
+    prescription_window.resizable(False, False)
+    prescription_window.title("Healthcare Application - Prescriptions")
+
+    BLUE = "cyan4"
+    prescription_window.config(bg=BLUE)
+    prescription_dataframe = pd.read_csv("MOCK_DATA.csv")
+
+    listbox = Listbox(prescription_window, width=100, height=46, bg="white")
+    listbox.place(x=50, y=155, width=500, height=400)
+
+    searching = prescription_dataframe.loc[prescription_dataframe["email"] == email_entry.get()]
+    index = searching.index
+
+    First = prescription_dataframe["first_name"]
+    first_name = First[index].item()
+
+    Surname = prescription_dataframe["last_name"]
+    sur_name = Surname[index].item()
+
+    name = "Showing medication for " + first_name + " " + sur_name
+    nameLabel = Label(prescription_window, bg='cyan4', fg='white', font=("Verdana", 17))
+    nameLabel.place(x=50, y=50)
+    nameLabel.config(text=name)
+
+    Medication = prescription_dataframe["med1"]
+    dataframe.med1.str.split(pat="\n", expand=True)
+    for item in Medication[index]:
+        listbox.insert("end", item)
+
+    prescription_window.mainloop()
+
+
 medication_header_btn = Button(header_frame, bg=CREAM, text="Medication", height=2, width=20)
 medication_header_btn.grid(row=0, column=1, padx=45, pady=10)
 
-prescriptions_header_btn = Button(header_frame, bg=CREAM, text="prescriptions", height=2, width=20)
+prescriptions_header_btn = Button(header_frame, bg=CREAM, text="prescriptions", height=2, width=20,command=prescription_tab)
 prescriptions_header_btn.grid(row=0, column=2, padx=45, pady=10)
 
 after_app_chat = Button(header_frame, bg=CREAM, text="After Appointment Chat", height=2, width=20)
@@ -420,6 +455,7 @@ accessButton = Button(main,  # generic test button
                       textvariable=contrastMode,
                       bg=CREAM, relief=RAISED, command=ContrastCheck)
 accessButton.grid(row=1, column=0)
+
 
 main.mainloop()  # mainloop the main window
 login_window.mainloop()
