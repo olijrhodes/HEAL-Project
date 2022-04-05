@@ -386,7 +386,9 @@ widgets = [booking_header_btn,
            firstname, lastname, address, postcode, healthnumber,
            login_enter, login_option, login_logo_label, second_login_logo_label,
            login_enter, login_option, booking_back_btn, min_sb, sec_hour,
-           msg, actionBtn, msg_display, second_login_confirm]
+           actionBtn, second_login_confirm]
+
+labels = [msg, msg_display]
 
 
 def HighContrast():  # creating a block to change the background to black and the foreground to yellow
@@ -397,6 +399,9 @@ def HighContrast():  # creating a block to change the background to black and th
     for widget in widgets:
         widget.configure(bg="Yellow")
 
+    for label in labels:
+        label.config(bg=BLACK, fg=YELLOW)
+
 
 def LowContrast():  # creating a block to change the background to blue and the foreground to cream
     for window in windows:
@@ -405,6 +410,9 @@ def LowContrast():  # creating a block to change the background to blue and the 
 
     for widget in widgets:
         widget.configure(bg=CREAM)
+
+    for label in labels:
+        label.config(bg=BLUE, fg=CREAM)
 
 
 accessButton = Button(main,  # generic test button
