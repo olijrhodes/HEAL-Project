@@ -46,14 +46,13 @@ setting_window.config(bg=BLUE)
 setting_window.withdraw()
 
 second_login_window = Toplevel()  # creating main window
-second_login_window.geometry(
-    "1100x600")  # setting the windobooking_window size, resizable, title and starting background
+second_login_window.geometry("1100x600")
 second_login_window.resizable(False, False)
 second_login_window.title("Healthcare Application - Login")
 second_login_window.config(bg=BLUE)
 second_login_window.withdraw()
 
-booking_selection = Tk()
+booking_selection = Toplevel()
 booking_selection.resizable(False, False)
 booking_selection.title("Healthcare Application - Booking Selection")
 booking_selection.geometry("500x400")
@@ -74,7 +73,7 @@ second_login_logo_frame.pack(pady=10)
 second_login_details_Frame = Frame(second_login_background_frame, width=400, bg=CREAM)
 second_login_details_Frame.pack()
 
-prescription_window = Tk()
+prescription_window = Toplevel()
 prescription_window.resizable(False, False)
 prescription_window.title("Healthcare Application - Prescriptions")
 prescription_window.geometry("1100x600")
@@ -211,15 +210,15 @@ login_option = Button(login_frame, text="Already have account? Login", command=s
 login_option.place(x=150, y=500)
 
 
-def show_booking_page():
-    booking_window.deiconify()
+def show_booking_selection():
+    booking_selection.deiconify()
     main.withdraw()
 
 
 # Main Window
 
 
-booking_header_btn = Button(header_frame, bg=CREAM, text="Booking", height=2, width=20, command=show_booking_page)
+booking_header_btn = Button(header_frame, bg=CREAM, text="Booking", height=2, width=20, command=show_booking_selection)
 booking_header_btn.grid(row=0, column=0, padx=45, pady=10)
 
 hour_string = IntVar()
@@ -231,11 +230,21 @@ f = ('Times', 20)
 
 def booking_back():
     booking_window.withdraw()
-    main.deiconify()
+    booking_selection.deiconify()
 
 
 booking_back_btn = Button(booking_window, text="<--", command=booking_back)
 booking_back_btn.place(x=0, y=0)
+
+
+def show_booking_page():
+    booking_selection.withdraw()
+    booking_window.deiconify()
+
+
+book_appointment_button = Button(booking_selection, text="Book an appointment", justify=CENTER, height=4, width=25,
+                                 command=show_booking_page)
+book_appointment_button.pack(pady=(25, 0))
 
 
 def display_msg():
@@ -332,7 +341,11 @@ listbox.place(x=50, y=155, width=500, height=400)
 booking_back_btn = Button(booking_window, text="<--", command=booking_back)
 booking_back_btn.place(x=0, y=0)
 
-def prescription_window():
+
+def prescription_window_open():
+    listbox.delete(0, END)
+    prescription_window.deiconify()
+    main.withdraw()
     searching = dataframe.loc[dataframe["email"] == email_entry.get()]
     index = searching.index
 
@@ -347,17 +360,13 @@ def prescription_window():
     nameLabel.place(x=50, y=50)
     nameLabel.config(text=name)
 
-
     Medication = dataframe["med1"]
     medication = Medication[index].item()
     str_medication = str(medication)
     split_medication = str_medication.split(',')
-    print(str_medication)
-    print(split_medication)
     for item in split_medication:
         listbox.insert("end", item)
 
-    prescription_window.mainloop()
 
 def prescription_back():
     prescription_window.withdraw()
@@ -367,11 +376,10 @@ def prescription_back():
 prescription_back_btn = Button(prescription_window, text="<--", command=prescription_back)
 prescription_back_btn.place(x=0, y=0)
 
-
 medication_header_btn = Button(header_frame, bg=CREAM, text="Medication", height=2, width=20)
 medication_header_btn.grid(row=0, column=1, padx=45, pady=10)
 
-prescriptions_header_btn = Button(header_frame, bg=CREAM, text="prescriptions", height=2, width=20)
+prescriptions_header_btn = Button(header_frame, bg=CREAM, text="prescriptions", command=prescription_window_open, height=2, width=20)
 prescriptions_header_btn.grid(row=0, column=2, padx=45, pady=10)
 
 after_app_chat = Button(header_frame, bg=CREAM, text="After Appointment Chat", height=2, width=20)
@@ -380,6 +388,7 @@ after_app_chat.grid(row=0, column=3, padx=45, pady=10)
 setting_btn = Button(header_frame, bg=CREAM, text=u"\u2699", height=1, width=3, font=('Helvatical bold', 15),
                      command=setting_btn_on)
 setting_btn.grid(row=0, column=4, padx=45, pady=10)
+
 
 # first time login page
 
@@ -484,3 +493,4 @@ login_window.mainloop()
 second_login_window.mainloop()
 setting_window.mainloop()
 booking_window.mainloop()
+prescription_window.mainloop()
