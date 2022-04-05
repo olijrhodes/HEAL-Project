@@ -387,7 +387,8 @@ prescription_back_btn.place(x=0, y=0)
 medication_header_btn = Button(header_frame, bg=CREAM, text="Medication", height=2, width=20)
 medication_header_btn.grid(row=0, column=1, padx=45, pady=10)
 
-prescriptions_header_btn = Button(header_frame, bg=CREAM, text="Prescriptions", command=prescription_window_open, height=2, width=20)
+prescriptions_header_btn = Button(header_frame, bg=CREAM, text="Prescriptions", command=prescription_window_open,
+                                  height=2, width=20)
 prescriptions_header_btn.grid(row=0, column=2, padx=45, pady=10)
 
 after_app_chat = Button(header_frame, bg=CREAM, text="After Appointment Chat", height=2, width=20)
