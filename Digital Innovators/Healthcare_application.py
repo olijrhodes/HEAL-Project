@@ -51,6 +51,13 @@ second_login_window.title("Healthcare Application - Login")
 second_login_window.config(bg=BLUE)
 second_login_window.withdraw()
 
+booking_selection = Tk()
+booking_selection.resizable(False, False)
+booking_selection.title("Healthcare Application - Booking Selection")
+booking_selection.geometry("500x400")
+booking_selection.config(bg=BLUE)
+booking_selection.withdraw()
+
 booking_window = Toplevel()
 booking_window.resizable(False, False)
 booking_window.title("Healthcare Application - Booking")
@@ -196,10 +203,8 @@ login_option.place(x=150, y=500)
 
 
 def show_booking_page():
-    booking_window.deiconify()
+    booking_selection.deiconify()
     main.withdraw()
-
-
 # Main Window
 
 
@@ -220,6 +225,16 @@ def booking_back():
 
 booking_back_btn = Button(booking_window, text="<--", command=booking_back)
 booking_back_btn.place(x=0, y=0)
+
+
+def show_booking_page():
+    booking_selection.withdraw()
+    booking_window.deiconify()
+
+
+book_appointment_button = Button(booking_selection, text="Book an appointment", justify=CENTER, height=4, width=25,
+                                 command=show_booking_page)
+book_appointment_button.pack(pady=(25,0))
 
 
 def display_msg():
@@ -268,8 +283,7 @@ min_sb = Spinbox(
     textvariable=hour_string,
     width=2,
     font=f,
-    justify=CENTER,
-    bg=BLUE
+    justify=CENTER
 )
 sec_hour = Spinbox(
     ftwo,
