@@ -5,6 +5,7 @@ import time
 import string
 import random
 from tkcalendar import *
+import datetime
 
 CREAM = "mint cream"  # setting constant variables(background and foreground)
 BLUE = "Cyan4"
@@ -236,11 +237,14 @@ if last_value == "59" and min_string.get() == "0":
 
 # if last_value_sec == "59" and sec_hour.get() == "0":
 #    min_string.set(int(min_string.get()) + 1 if min_string.get() != "59" else 0)
+# the code messaged out is to show that we can also add seconds in, but decided there is no need for that
 if last_value == "59":
     hour_string.set(int(hour_string.get()) + 1 if hour_string.get() != "23" else 0)
 
 fone = Frame(booking_window)
 ftwo = Frame(booking_window)
+
+today = datetime.date.today()
 
 fone.pack(pady=10)
 ftwo.pack(pady=10)
@@ -248,9 +252,11 @@ ftwo.pack(pady=10)
 cal = Calendar(
     fone,
     selectmode="day",
-    year=2022,
-    month=4,
-    day=4
+    year=today.year,
+    month=today.month,
+    day=today.month,
+    locale='en_UK'
+
 )
 cal.pack()
 
@@ -261,9 +267,9 @@ min_sb = Spinbox(
     wrap=True,
     textvariable=hour_string,
     width=2,
-    state="readonly",
     font=f,
-    justify=CENTER
+    justify=CENTER,
+    bg=BLUE
 )
 sec_hour = Spinbox(
     ftwo,
