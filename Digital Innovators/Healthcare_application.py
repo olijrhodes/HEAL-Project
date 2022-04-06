@@ -103,6 +103,9 @@ contrastMode.set("High Contrast mode [off]")
 header_frame = Frame(main, bg=BLUE)
 header_frame.grid(row=0)
 
+settings_back_frame = Frame(setting_window)
+settings_back_frame.grid(row=0, column=0)
+
 
 def on_enter_email(e):
     if email_entry.get() == "Email":
@@ -131,8 +134,6 @@ def on_leave_password(e):
 def setting_btn_on():
     main.withdraw()
     setting_window.deiconify()
-
-
 
 
 def setting_btn_off():
@@ -366,18 +367,14 @@ booking_back_btn = Button(booking_window, text="<--", command=booking_back)
 booking_back_btn.place(x=0, y=0)
 
 
-
-
-
-
-
 def cancel_booking_appointments_open():
     booking_selection.withdraw()
     cancel_appointment_window.deiconify()
 
 
-cancel_booking_appointments_btn = Button(booking_selection, text="Cancel an appointment", justify=CENTER, height=4, width=25,
-                                 command=cancel_booking_appointments_open)
+cancel_booking_appointments_btn = Button(booking_selection, text="Cancel an appointment", justify=CENTER, height=4,
+                                         width=25,
+                                         command=cancel_booking_appointments_open)
 cancel_booking_appointments_btn.pack(pady=(0, 50), side=BOTTOM)
 
 
@@ -396,7 +393,7 @@ def view_appointments_open():
 
 
 view_appointments_btn = Button(booking_selection, text="View Appointments", justify=CENTER, height=4, width=25,
-                                 command=view_appointments_open)
+                               command=view_appointments_open)
 view_appointments_btn.place(x=158, y=165)
 
 
@@ -407,7 +404,6 @@ def view_appointments_back():
 
 view_appointments_back_btn = Button(view_booking_appointment_window, text="<--", command=view_appointments_back)
 view_appointments_back_btn.place(x=0, y=0)
-
 
 
 def prescription_window_open():
@@ -496,10 +492,25 @@ password_entry.bind("<Return>", login_confirm)
 second_login_confirm = Button(second_login_details_Frame, text="Confirm", command=login_confirm)
 second_login_confirm.grid(row=1, column=0, columnspan=2, pady=(10, 300))
 
+
 # Settings Page
 
-settings_back_btn = Button(setting_window, text="<--", command=setting_btn_off)
+def change_user_pass():
+    pass
+
+
+def config_notif():
+    pass
+
+
+settings_back_btn = Button(settings_back_frame, text="<--", command=setting_btn_off, relief=FLAT, bg=BLUE, fg=CREAM)
 settings_back_btn.grid(row=0, column=0)
+change_password = Button(setting_window, text="Change Password", command=change_user_pass, bg=CREAM, fg="Black",
+                         width=20)
+change_password.grid(row=2, column=0, padx=(20, 0))
+config_notifications = Button(setting_window, text="Configure Notifications", command=config_notif, bg=CREAM,
+                              fg="Black", width=20)
+config_notifications.grid(row=3, column=0, padx=(20, 0))
 
 
 def ContrastCheck():  # checking whether to change the accessibility options
@@ -520,15 +531,15 @@ windows = [main, header_frame, login_window, login_frame, login_logo_frame, logi
 
 widgets = [booking_header_btn,
            medication_header_btn, prescriptions_header_btn,
-           after_app_chat, setting_btn, settings_back_btn,
+           after_app_chat, setting_btn,
            firstname, lastname, address, postcode, healthnumber,
            login_enter, login_option, login_logo_label, second_login_logo_label,
            login_enter, login_option, booking_back_btn, min_sb, sec_hour,
            actionBtn, second_login_confirm, view_appointments_btn, cancel_appointments_back_btn,
            cancel_booking_appointments_btn, book_appointment_button, booking_selection_back_btn,
-           view_appointments_back_btn]
+           view_appointments_back_btn, change_password, config_notifications]
 
-labels = [msg, msg_display]
+labels = [msg, msg_display, settings_back_btn]
 
 
 def HighContrast():  # creating a block to change the background to black and the foreground to yellow
@@ -555,10 +566,10 @@ def LowContrast():  # creating a block to change the background to blue and the 
         label.config(bg=BLUE, fg=CREAM)
 
 
-accessButton = Button(main,  # generic test button
+accessButton = Button(setting_window,  # generic test button
                       textvariable=contrastMode,
-                      bg=CREAM, relief=RAISED, command=ContrastCheck)
-accessButton.grid(row=1, column=0)
+                      bg=CREAM, relief=RAISED, command=ContrastCheck, width=20)
+accessButton.grid(row=1, column=0, padx=(20, 0))
 
 main.mainloop()  # mainloop the main window
 login_window.mainloop()
