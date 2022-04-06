@@ -119,6 +119,8 @@ def setting_btn_on():
     setting_window.deiconify()
 
 
+
+
 def setting_btn_off():
     main.deiconify()
     setting_window.withdraw()
