@@ -1,4 +1,4 @@
-from tkinter import *  # imports
+from tkinter import *
 import pandas as pd
 from win10toast import ToastNotifier
 import time
@@ -18,8 +18,8 @@ notifier = ToastNotifier()
 
 dataframe = pd.read_csv("MOCK_DATA.csv", on_bad_lines='skip')
 
-login_window = Tk()  # creating main window
-login_window.geometry("1100x600")  # setting the windobooking_window size, resizable, title and starting background
+login_window = Tk()
+login_window.geometry("1100x600")
 login_window.resizable(False, False)
 login_window.title("Healthcare Application - First Time Login")
 login_window.config(bg=BLUE)
@@ -31,8 +31,8 @@ login_logo_frame.pack(pady=(0, 100))
 login_details_Frame = Frame(login_frame, width=400, height=300, bg=CREAM)
 login_details_Frame.pack(pady=(0, 175))
 
-main = Toplevel()  # creating main window
-main.geometry("1100x600")  # setting the windobooking_window size, resizable, title and starting background
+main = Toplevel()
+main.geometry("1100x600")
 main.resizable(False, False)
 main.title("Healthcare Application - Home")
 main.config(bg=BLUE)
@@ -45,7 +45,7 @@ setting_window.title("Healthcare Application - Settings")
 setting_window.config(bg=BLUE)
 setting_window.withdraw()
 
-second_login_window = Toplevel()  # creating main window
+second_login_window = Toplevel()
 second_login_window.geometry("1100x600")
 second_login_window.resizable(False, False)
 second_login_window.title("Healthcare Application - Login")
@@ -131,6 +131,8 @@ def on_leave_password(e):
 def setting_btn_on():
     main.withdraw()
     setting_window.deiconify()
+
+
 
 
 def setting_btn_off():
@@ -445,7 +447,8 @@ prescription_back_btn.place(x=0, y=0)
 medication_header_btn = Button(header_frame, bg=CREAM, text="Medication", height=2, width=20)
 medication_header_btn.grid(row=0, column=1, padx=45, pady=10)
 
-prescriptions_header_btn = Button(header_frame, bg=CREAM, text="Prescriptions", command=prescription_window_open, height=2, width=20)
+prescriptions_header_btn = Button(header_frame, bg=CREAM, text="Prescriptions", command=prescription_window_open,
+                                  height=2, width=20)
 prescriptions_header_btn.grid(row=0, column=2, padx=45, pady=10)
 
 after_app_chat = Button(header_frame, bg=CREAM, text="After Appointment Chat", height=2, width=20)
