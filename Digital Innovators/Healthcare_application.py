@@ -6,6 +6,9 @@ import string
 import random
 from tkcalendar import *
 import datetime
+from bs4 import BeautifulSoup
+import requests
+import webbrowser
 
 selected_font = ("Microsoft YaHei UI Light", 11)
 
@@ -79,6 +82,16 @@ prescription_window.title("Healthcare Application - Prescriptions")
 prescription_window.geometry("1100x600")
 prescription_window.config(bg=BLUE)
 prescription_window.withdraw()
+
+reading_window = Toplevel()
+reading_window.resizable(False, False)
+reading_window.title("Healthcare Application - Reading")
+reading_window.geometry("1100x600")
+reading_window.config(bg=BLUE)
+reading_window.withdraw()
+
+reading_strvar = StringVar()
+
 
 checkInt = IntVar()  # creating the check button's integer variable to live update the value
 checkInt.set(0)  # setting the IntVar to 0 by default
@@ -381,11 +394,37 @@ def prescription_back():
     main.deiconify()
 
 
+#labelread = Label(reading_window, textvariable=reading_strvar, bg=CREAM, font=(selected_font), width=50, height=20,justify=CENTER)
+#labelread.pack(pady=(50,0))
+
+def display_url(url):
+    webbrowser.open_new(url)
+
+
+def reading_window_open():
+    main.withdraw()
+    reading_window.deiconify()
+
+    url = 'https://www.england.nhs.uk/news/'
+    response = requests.get(url)
+
+    html = response.content
+    soup = BeautifulSoup(html, "html.parser")
+
+    results = soup.find_all("article", attrs={"class": "post group"})
+    for item in results:
+        header = item.find_all("h2")
+        for line in header:
+            url_label = Label(reading_window, text=line.get_text())
+            url_label.pack(pady=10)
+            url_label.bind("<Button-1>", lambda e: display_url(line.find('a').get('href')))
+
+
 prescription_back_btn = Button(prescription_window, text="<--", command=prescription_back)
 prescription_back_btn.place(x=0, y=0)
 
-medication_header_btn = Button(header_frame, bg=CREAM, text="Medication", height=2, width=20)
-medication_header_btn.grid(row=0, column=1, padx=45, pady=10)
+reading_header_btn = Button(header_frame, bg=CREAM, text="Reading", height=2, width=20, command=reading_window_open)
+reading_header_btn.grid(row=0, column=1, padx=45, pady=10)
 
 prescriptions_header_btn = Button(header_frame, bg=CREAM, text="Prescriptions", command=prescription_window_open,
                                   height=2, width=20)
@@ -473,7 +512,7 @@ windows = [main, header_frame, login_window, login_frame, login_logo_frame, logi
            second_login_logo_frame, second_login_details_Frame, fone, ftwo]
 
 widgets = [booking_header_btn,
-           medication_header_btn, prescriptions_header_btn,
+           reading_header_btn, prescriptions_header_btn,
            after_app_chat, setting_btn, settings_back_btn,
            firstname, lastname, address, postcode, healthnumber,
            login_enter, login_option, login_logo_label, second_login_logo_label,

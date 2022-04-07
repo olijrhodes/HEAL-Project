@@ -37,4 +37,4 @@ def file_decrypt(original_file):
         print("Sorry File Not Found!")
 
 
-file_encrypt("MOCK_DATA1.csv")
+file_encrypt("MOCK_DATA.csv")
