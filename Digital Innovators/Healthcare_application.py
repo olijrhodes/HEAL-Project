@@ -1,4 +1,4 @@
-from tkinter import *
+from tkinter import *  # imports
 import pandas as pd
 from win10toast import ToastNotifier
 import time
@@ -18,8 +18,8 @@ notifier = ToastNotifier()
 
 dataframe = pd.read_csv("MOCK_DATA.csv", on_bad_lines='skip')
 
-login_window = Tk()
-login_window.geometry("1100x600")
+login_window = Tk()  # creating main window
+login_window.geometry("1100x600")  # setting the windobooking_window size, resizable, title and starting background
 login_window.resizable(False, False)
 login_window.title("Healthcare Application - First Time Login")
 login_window.config(bg=BLUE)
@@ -31,8 +31,8 @@ login_logo_frame.pack(pady=(0, 100))
 login_details_Frame = Frame(login_frame, width=400, height=300, bg=CREAM)
 login_details_Frame.pack(pady=(0, 175))
 
-main = Toplevel()
-main.geometry("1100x600")
+main = Toplevel()  # creating main window
+main.geometry("1100x600")  # setting the windobooking_window size, resizable, title and starting background
 main.resizable(False, False)
 main.title("Healthcare Application - Home")
 main.config(bg=BLUE)
@@ -45,7 +45,7 @@ setting_window.title("Healthcare Application - Settings")
 setting_window.config(bg=BLUE)
 setting_window.withdraw()
 
-second_login_window = Toplevel()
+second_login_window = Toplevel()  # creating main window
 second_login_window.geometry("1100x600")
 second_login_window.resizable(False, False)
 second_login_window.title("Healthcare Application - Login")
@@ -79,20 +79,6 @@ prescription_window.title("Healthcare Application - Prescriptions")
 prescription_window.geometry("1100x600")
 prescription_window.config(bg=BLUE)
 prescription_window.withdraw()
-
-cancel_appointment_window = Toplevel()
-cancel_appointment_window.resizable(False, False)
-cancel_appointment_window.title("Healthcare Application - cancel appointment")
-cancel_appointment_window.geometry("1100x600")
-cancel_appointment_window.config(bg=BLUE)
-cancel_appointment_window.withdraw()
-
-view_booking_appointment_window = Toplevel()
-view_booking_appointment_window.resizable(False, False)
-view_booking_appointment_window.title("Healthcare Application - view appointment")
-view_booking_appointment_window.geometry("1100x600")
-view_booking_appointment_window.config(bg=BLUE)
-view_booking_appointment_window.withdraw()
 
 checkInt = IntVar()  # creating the check button's integer variable to live update the value
 checkInt.set(0)  # setting the IntVar to 0 by default
@@ -131,8 +117,6 @@ def on_leave_password(e):
 def setting_btn_on():
     main.withdraw()
     setting_window.deiconify()
-
-
 
 
 def setting_btn_off():
@@ -269,7 +253,7 @@ def show_booking_page():
 
 book_appointment_button = Button(booking_selection, text="Book an appointment", justify=CENTER, height=4, width=25,
                                  command=show_booking_page)
-book_appointment_button.pack(pady=(50, 0))
+book_appointment_button.pack(pady=(25, 0))
 
 
 def display_msg():
@@ -366,50 +350,6 @@ booking_back_btn = Button(booking_window, text="<--", command=booking_back)
 booking_back_btn.place(x=0, y=0)
 
 
-
-
-
-
-
-def cancel_booking_appointments_open():
-    booking_selection.withdraw()
-    cancel_appointment_window.deiconify()
-
-
-cancel_booking_appointments_btn = Button(booking_selection, text="Cancel an appointment", justify=CENTER, height=4, width=25,
-                                 command=cancel_booking_appointments_open)
-cancel_booking_appointments_btn.pack(pady=(0, 50), side=BOTTOM)
-
-
-def cancel_appointments_back():
-    cancel_appointment_window.withdraw()
-    booking_selection.deiconify()
-
-
-cancel_appointments_back_btn = Button(cancel_appointment_window, text="<--", command=cancel_appointments_back)
-cancel_appointments_back_btn.place(x=0, y=0)
-
-
-def view_appointments_open():
-    booking_selection.withdraw()
-    view_booking_appointment_window.deiconify()
-
-
-view_appointments_btn = Button(booking_selection, text="View Appointments", justify=CENTER, height=4, width=25,
-                                 command=view_appointments_open)
-view_appointments_btn.place(x=158, y=165)
-
-
-def view_appointments_back():
-    view_booking_appointment_window.withdraw()
-    booking_selection.deiconify()
-
-
-view_appointments_back_btn = Button(view_booking_appointment_window, text="<--", command=view_appointments_back)
-view_appointments_back_btn.place(x=0, y=0)
-
-
-
 def prescription_window_open():
     listbox.delete(0, END)
     prescription_window.deiconify()
@@ -496,10 +436,25 @@ password_entry.bind("<Return>", login_confirm)
 second_login_confirm = Button(second_login_details_Frame, text="Confirm", command=login_confirm)
 second_login_confirm.grid(row=1, column=0, columnspan=2, pady=(10, 300))
 
+
 # Settings Page
 
-settings_back_btn = Button(setting_window, text="<--", command=setting_btn_off)
-settings_back_btn.grid(row=0, column=0)
+def change_password():
+    pass
+
+
+def notif_config():
+    pass
+
+
+settings_back_btn = Button(setting_window, text="<--", command=setting_btn_off, font=selected_font)
+settings_back_btn.grid(row=0, column=0, sticky=W, pady=(0, 10))
+
+password_changer = Button(setting_window, text="Change Password", command=change_password, width=20, font=selected_font)
+password_changer.grid(row=2, column=0)
+
+config_notifications = Button(setting_window, text="Configure Notifications", width=20, command=notif_config, font=selected_font)
+config_notifications.grid(row=3, column=0)
 
 
 def ContrastCheck():  # checking whether to change the accessibility options
@@ -515,8 +470,7 @@ def ContrastCheck():  # checking whether to change the accessibility options
 
 windows = [main, header_frame, login_window, login_frame, login_logo_frame, login_details_Frame,
            setting_window, second_login_window, booking_window, second_login_background_frame,
-           second_login_logo_frame, second_login_details_Frame, fone, ftwo, prescription_window,
-           booking_selection, cancel_appointment_window, view_booking_appointment_window]
+           second_login_logo_frame, second_login_details_Frame, fone, ftwo]
 
 widgets = [booking_header_btn,
            medication_header_btn, prescriptions_header_btn,
@@ -524,9 +478,7 @@ widgets = [booking_header_btn,
            firstname, lastname, address, postcode, healthnumber,
            login_enter, login_option, login_logo_label, second_login_logo_label,
            login_enter, login_option, booking_back_btn, min_sb, sec_hour,
-           actionBtn, second_login_confirm, view_appointments_btn, cancel_appointments_back_btn,
-           cancel_booking_appointments_btn, book_appointment_button, booking_selection_back_btn,
-           view_appointments_back_btn]
+           actionBtn, second_login_confirm]
 
 labels = [msg, msg_display]
 
@@ -555,9 +507,9 @@ def LowContrast():  # creating a block to change the background to blue and the 
         label.config(bg=BLUE, fg=CREAM)
 
 
-accessButton = Button(main,  # generic test button
+accessButton = Button(setting_window,  # generic test button
                       textvariable=contrastMode,
-                      bg=CREAM, relief=RAISED, command=ContrastCheck)
+                      bg=CREAM, relief=RAISED, command=ContrastCheck, width=20)
 accessButton.grid(row=1, column=0)
 
 main.mainloop()  # mainloop the main window
