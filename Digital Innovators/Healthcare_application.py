@@ -436,10 +436,25 @@ password_entry.bind("<Return>", login_confirm)
 second_login_confirm = Button(second_login_details_Frame, text="Confirm", command=login_confirm)
 second_login_confirm.grid(row=1, column=0, columnspan=2, pady=(10, 300))
 
+
 # Settings Page
 
-settings_back_btn = Button(setting_window, text="<--", command=setting_btn_off)
-settings_back_btn.grid(row=0, column=0)
+def change_password():
+    pass
+
+
+def notif_config():
+    pass
+
+
+settings_back_btn = Button(setting_window, text="<--", command=setting_btn_off, font=selected_font)
+settings_back_btn.grid(row=0, column=0, sticky=W, pady=(0, 10))
+
+password_changer = Button(setting_window, text="Change Password", command=change_password, width=20, font=selected_font)
+password_changer.grid(row=2, column=0)
+
+config_notifications = Button(setting_window, text="Configure Notifications", width=20, command=notif_config, font=selected_font)
+config_notifications.grid(row=3, column=0)
 
 
 def ContrastCheck():  # checking whether to change the accessibility options
@@ -492,9 +507,9 @@ def LowContrast():  # creating a block to change the background to blue and the 
         label.config(bg=BLUE, fg=CREAM)
 
 
-accessButton = Button(main,  # generic test button
+accessButton = Button(setting_window,  # generic test button
                       textvariable=contrastMode,
-                      bg=CREAM, relief=RAISED, command=ContrastCheck)
+                      bg=CREAM, relief=RAISED, command=ContrastCheck, width=20)
 accessButton.grid(row=1, column=0)
 
 main.mainloop()  # mainloop the main window
