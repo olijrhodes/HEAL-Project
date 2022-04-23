@@ -1,3 +1,7 @@
+from tkinter import *
+import pandas as pd
+
+email_entry = "ollierhodes@gmail.com"
 def prescription_tab():
     prescription_window = Tk()
     prescription_window.geometry("1100x600")
@@ -11,7 +15,7 @@ def prescription_tab():
     listbox = Listbox(prescription_window, width=100, height=46, bg="white")
     listbox.place(x=50, y=155, width=500, height=400)
 
-    searching = prescription_dataframe.loc[prescription_dataframe["email"] == email_entry.get()]
+    searching = prescription_dataframe.loc[prescription_dataframe["email"] == email_entry]
     index = searching.index
 
     First = prescription_dataframe["first_name"]
@@ -30,3 +34,5 @@ def prescription_tab():
         listbox.insert("end", item)
 
     prescription_window.mainloop()
+
+prescription_tab()

@@ -9,21 +9,28 @@ import datetime
 from bs4 import BeautifulSoup
 import requests
 import webbrowser
+from PIL import Image, ImageTk
 
 selected_font = ("Microsoft YaHei UI Light", 11)
 title_font = ("Microsoft YaHei UI", 12)
+back_font = ("Microsoft YaHei UI", 15)
 
 CREAM = "mint cream"  # setting constant variables(background and foreground)
 BLUE = "Cyan4"
 YELLOW = "Yellow2"
 BLACK = "Black"
 
+min_w = 50  # Minimum width of the frame
+max_w = 200  # Maximum width of the frame
+cur_width = min_w  # Increasing width of the frame
+expanded = False  # Check if it is completely exanded
+
 notifier = ToastNotifier()
 
 dataframe = pd.read_csv("MOCK_DATA.csv", on_bad_lines='skip')
 
 login_window = Tk()  # creating main window
-login_window.geometry("1100x600")  # setting the windobooking_window size, resizable, title and starting background
+login_window.geometry("1100x600")
 login_window.resizable(False, False)
 login_window.title("Healthcare Application - First Time Login")
 login_window.config(bg=BLUE)
@@ -36,7 +43,7 @@ login_details_Frame = Frame(login_frame, width=400, height=300, bg=CREAM)
 login_details_Frame.pack(pady=(0, 175))
 
 main = Toplevel()  # creating main window
-main.geometry("1100x600")  # setting the windobooking_window size, resizable, title and starting background
+main.geometry("1100x600")
 main.resizable(False, False)
 main.title("Healthcare Application - Home")
 main.config(bg=BLUE)
@@ -91,17 +98,11 @@ reading_window.geometry("700x400")
 reading_window.config(bg=BLUE)
 reading_window.withdraw()
 
-reading_strvar = StringVar()
-
-
 checkInt = IntVar()  # creating the check button's integer variable to live update the value
 checkInt.set(0)  # setting the IntVar to 0 by default
 
 contrastMode = StringVar()  # creating a StringVar for the button text
 contrastMode.set("High Contrast mode [off]")
-
-header_frame = Frame(main, bg=BLUE)
-header_frame.grid(row=0)
 
 
 def on_enter_email(e):
@@ -231,10 +232,6 @@ def show_booking_selection():
 
 # Main Window
 
-
-booking_header_btn = Button(header_frame, bg=CREAM, text="Booking", height=2, width=20, command=show_booking_selection)
-booking_header_btn.grid(row=0, column=0, padx=45, pady=10)
-
 hour_string = IntVar()
 min_string = IntVar()
 # last_value_sec = ""
@@ -247,7 +244,9 @@ def booking_back():
     booking_selection.deiconify()
 
 
-booking_back_btn = Button(booking_window, text="<--", command=booking_back)
+booking_back_btn = Button(booking_window, text="\u2190", font=back_font, relief=FLAT, bg=BLUE, fg=CREAM,
+                          command=booking_back)
+
 booking_back_btn.place(x=0, y=0)
 
 
@@ -256,7 +255,9 @@ def booking_selection_back():
     booking_selection.withdraw()
 
 
-booking_selection_back_btn = Button(booking_selection, text="<--", command=booking_selection_back)
+booking_selection_back_btn = Button(booking_selection, text="\u2190", font=back_font, relief=FLAT, bg=BLUE, fg=CREAM,
+                                    command=booking_selection_back)
+
 booking_selection_back_btn.place(x=0, y=0)
 
 
@@ -357,15 +358,12 @@ msg_display = Label(
 )
 msg_display.pack(pady=10)
 
-listbox = Listbox(prescription_window, width=100, height=46, bg="white")
-listbox.place(x=50, y=155, width=500, height=400)
-
-booking_back_btn = Button(booking_window, text="<--", command=booking_back)
-booking_back_btn.place(x=0, y=0)
+medication_listbox = Listbox(prescription_window, font=selected_font, width=100, height=46, bg=CREAM)
+medication_listbox.place(x=50, y=155, width=500, height=400)
 
 
 def prescription_window_open():
-    listbox.delete(0, END)
+    medication_listbox.delete(0, END)
     prescription_window.deiconify()
     main.withdraw()
     searching = dataframe.loc[dataframe["email"] == email_entry.get()]
@@ -387,7 +385,7 @@ def prescription_window_open():
     str_medication = str(medication)
     split_medication = str_medication.split(',')
     for item in split_medication:
-        listbox.insert("end", item)
+        medication_listbox.insert("end", item)
 
 
 def prescription_back():
@@ -403,13 +401,15 @@ def reading_back():
 news_dict = {"text": [],
              "url": []}
 
-reading_back_btn = Button(reading_window, text="<--", command=reading_back, relief=FLAT)
+reading_back_btn = Button(reading_window, font=back_font, text="\u2190", command=reading_back, relief=FLAT, bg=BLUE,
+                          fg=CREAM)
+
 reading_back_btn.pack(anchor=NW)
 
 reading_contents = Frame(reading_window, bg=BLUE)
 reading_contents.pack(pady=15)
 
-Label(reading_contents, text="Today's Top News", font=title_font, bg=CREAM, fg=BLACK).pack(anchor=W)
+Label(reading_contents, text="Today's Top News", font=title_font, bg=BLUE, fg=CREAM).pack(anchor=W)
 
 
 def select_story(e):
@@ -453,23 +453,10 @@ def reading_window_open():
             listbox.insert(0, line.get_text())
 
 
-prescription_back_btn = Button(prescription_window, text="<--", command=prescription_back)
+prescription_back_btn = Button(prescription_window, text="\u2190", font=back_font, relief=FLAT, bg=BLUE, fg=CREAM,
+                               command=prescription_back)
+
 prescription_back_btn.place(x=0, y=0)
-
-reading_header_btn = Button(header_frame, bg=CREAM, text="Reading", height=2, width=20, command=reading_window_open)
-reading_header_btn.grid(row=0, column=1, padx=45, pady=10)
-
-prescriptions_header_btn = Button(header_frame, bg=CREAM, text="Prescriptions", command=prescription_window_open,
-                                  height=2, width=20)
-prescriptions_header_btn.grid(row=0, column=2, padx=45, pady=10)
-
-after_app_chat = Button(header_frame, bg=CREAM, text="After Appointment Chat", height=2, width=20)
-after_app_chat.grid(row=0, column=3, padx=45, pady=10)
-
-setting_btn = Button(header_frame, bg=CREAM, text=u"\u2699", height=1, width=3, font=('Helvatical bold', 15),
-                     command=setting_btn_on)
-setting_btn.grid(row=0, column=4, padx=45, pady=10)
-
 
 # first time login page
 
@@ -519,14 +506,89 @@ def notif_config():
     pass
 
 
-settings_back_btn = Button(setting_window, text="<--", command=setting_btn_off, font=selected_font)
+settings_back_btn = Button(setting_window, text="\u2190", font=back_font, relief=FLAT, bg=BLUE, fg=CREAM,
+                           command=setting_btn_off)
+
 settings_back_btn.grid(row=0, column=0, sticky=W, pady=(0, 10))
 
 password_changer = Button(setting_window, text="Change Password", command=change_password, width=20, font=selected_font)
 password_changer.grid(row=2, column=0)
 
-config_notifications = Button(setting_window, text="Configure Notifications", width=20, command=notif_config, font=selected_font)
+config_notifications = Button(setting_window, text="Configure Notifications", width=20, command=notif_config,
+                              font=selected_font)
+
 config_notifications.grid(row=3, column=0)
+
+
+def expand():
+    global cur_width, expanded
+    cur_width += 10  # Increase the width by 10
+    rep = main.after(5, expand)  # Repeat this func every 5 ms
+    frame.config(width=cur_width)  # Change the width to new increase width
+    if cur_width >= max_w:  # If width is greater than maximum width
+        expanded = True  # Frame is expended
+        main.after_cancel(rep)  # Stop repeating the func
+        fill()
+
+
+def contract():
+    global cur_width, expanded
+    cur_width -= 10  # Reduce the width by 10
+    rep = main.after(5, contract)  # Call this func every 5 ms
+    frame.config(width=cur_width)  # Change the width to new reduced width
+    if cur_width <= min_w:  # If it is back to normal width
+        expanded = False  # Frame is not expanded
+        main.after_cancel(rep)  # Stop repeating the func
+        fill()
+
+
+def fill():
+    if expanded:
+        booking_btn.config(text='Booking', image='', font=selected_font, width=15)
+        reading_btn.config(text='News', image='', font=selected_font, width=15)
+        medication_btn.config(text='Medication', image='', font=selected_font, width=15)
+        chat_btn.config(text='24hr Chat', image='', font=selected_font, width=15)
+        settings_btn.config(text='settings', image='', font=selected_font, width=15)
+    else:
+        # Bring the image back
+        booking_btn.config(image=booking_icon, font=selected_font, width=15)
+        reading_btn.config(image=reading_icon, font=selected_font, width=15)
+        medication_btn.config(image=medication_icon, font=selected_font, width=15)
+        chat_btn.config(image=chat_icon, font=selected_font, width=15)
+        settings_btn.config(image=settings_icon, font=selected_font, width=15)
+
+
+# Define the icons to be shown and resize it
+booking_icon = ImageTk.PhotoImage(Image.open('Images/booking.png').resize((40, 40), Image.ANTIALIAS))
+reading_icon = ImageTk.PhotoImage(Image.open('Images/reading.png').resize((40, 40), Image.ANTIALIAS))
+medication_icon = ImageTk.PhotoImage(Image.open('Images/medication.png').resize((40, 40), Image.ANTIALIAS))
+chat_icon = ImageTk.PhotoImage(Image.open('Images/chat.png').resize((40, 40), Image.ANTIALIAS))
+settings_icon = ImageTk.PhotoImage(Image.open('Images/settings.png').resize((40, 40), Image.ANTIALIAS))
+
+main.update()  # For the width to get updated
+frame = Frame(main, bg=CREAM, width=50, height=main.winfo_height())
+frame.grid(row=0, column=0)
+
+# Make the buttons with the icons to be shown
+booking_btn = Button(frame, image=booking_icon, bg=CREAM, relief='flat', command=show_booking_selection)
+reading_btn = Button(frame, image=reading_icon, bg=CREAM, relief='flat', command=reading_window_open)
+medication_btn = Button(frame, image=medication_icon, bg=CREAM, relief='flat', command=prescription_window_open)
+chat_btn = Button(frame, image=chat_icon, bg=CREAM, relief='flat')
+settings_btn = Button(frame, image=settings_icon, bg=CREAM, relief='flat', command=setting_btn_on)
+
+# Put them on the frame
+booking_btn.grid(row=0, column=0, pady=(20, 20))
+reading_btn.grid(row=1, column=0, pady=(20, 20))
+medication_btn.grid(row=2, column=0, pady=(20, 20))
+chat_btn.grid(row=3, column=0, pady=(20, 20))
+settings_btn.grid(row=4, column=0, pady=(20, 20))
+
+# Bind to the frame, if entered or left
+frame.bind('<Enter>', lambda e: expand())
+frame.bind('<Leave>', lambda e: contract())
+
+# So that it does not depend on the widgets inside the frame
+frame.grid_propagate(False)
 
 
 def ContrastCheck():  # checking whether to change the accessibility options
@@ -540,13 +602,11 @@ def ContrastCheck():  # checking whether to change the accessibility options
         contrastMode.set("High Contrast Mode [off]")
 
 
-windows = [main, header_frame, login_window, login_frame, login_logo_frame, login_details_Frame,
+windows = [main, login_window, login_frame, login_logo_frame, login_details_Frame,
            setting_window, second_login_window, booking_window, second_login_background_frame,
            second_login_logo_frame, second_login_details_Frame, fone, ftwo]
 
-widgets = [booking_header_btn,
-           reading_header_btn, prescriptions_header_btn,
-           after_app_chat, setting_btn, settings_back_btn,
+widgets = [settings_back_btn,
            firstname, lastname, address, postcode, healthnumber,
            login_enter, login_option, login_logo_label, second_login_logo_label,
            login_enter, login_option, booking_back_btn, min_sb, sec_hour,
