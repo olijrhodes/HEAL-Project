@@ -394,16 +394,19 @@ def prescription_back():
     main.deiconify()
 
 
-#labelread = Label(reading_window, textvariable=reading_strvar, bg=CREAM, font=(selected_font), width=50, height=20,justify=CENTER)
-#labelread.pack(pady=(50,0))
-
-def display_url(url):
-    webbrowser.open_new(url)
+def display_url(url1):
+    print(url1)
+    webbrowser.open_new(url1)
 
 
 def reading_window_open():
     main.withdraw()
     reading_window.deiconify()
+
+    reading_back_frame = Frame(reading_window)
+    reading_back_frame.pack(side=TOP)
+
+    reading_back_btn = Button(readi)
 
     url = 'https://www.england.nhs.uk/news/'
     response = requests.get(url)
@@ -411,14 +414,22 @@ def reading_window_open():
     html = response.content
     soup = BeautifulSoup(html, "html.parser")
 
+    news_dict = {"text": [],
+                 "url": []
+                 }
+    listbox = Listbox(reading_window, width=100, height=len(news_dict["text"]))
+    listbox.grid(row=0, column=0)
+
     results = soup.find_all("article", attrs={"class": "post group"})
     for item in results:
         header = item.find_all("h2")
         for line in header:
-            url_label = Label(reading_window, text=line.get_text())
-            url_label.pack(pady=10)
-            url_label.bind("<Button-1>", lambda e: display_url(line.find('a').get('href')))
-
+            news_dict["text"].append(line.get_text())
+            news_dict["url"].append(line.find('a').get('href'))
+            listbox.insert(0, line.get_text())
+    first = news_dict["text"][1]
+    print(first)
+    print(news_dict["text"].index(first))
 
 prescription_back_btn = Button(prescription_window, text="<--", command=prescription_back)
 prescription_back_btn.place(x=0, y=0)
