@@ -11,6 +11,7 @@ import requests
 import webbrowser
 
 selected_font = ("Microsoft YaHei UI Light", 11)
+title_font = ("Microsoft YaHei UI", 12)
 
 CREAM = "mint cream"  # setting constant variables(background and foreground)
 BLUE = "Cyan4"
@@ -86,7 +87,7 @@ prescription_window.withdraw()
 reading_window = Toplevel()
 reading_window.resizable(False, False)
 reading_window.title("Healthcare Application - Reading")
-reading_window.geometry("1100x600")
+reading_window.geometry("700x400")
 reading_window.config(bg=BLUE)
 reading_window.withdraw()
 
@@ -394,19 +395,44 @@ def prescription_back():
     main.deiconify()
 
 
-def display_url(url1):
-    print(url1)
-    webbrowser.open_new(url1)
+def reading_back():
+    reading_window.withdraw()
+    main.deiconify()
+
+
+news_dict = {"text": [],
+             "url": []}
+
+reading_back_btn = Button(reading_window, text="<--", command=reading_back, relief=FLAT)
+reading_back_btn.pack(anchor=NW)
+
+reading_contents = Frame(reading_window, bg=BLUE)
+reading_contents.pack(pady=15)
+
+Label(reading_contents, text="Today's Top News", font=title_font, bg=CREAM, fg=BLACK).pack(anchor=W)
+
+
+def select_story(e):
+    story_text = listbox.get(listbox.curselection())
+    index = news_dict["text"].index(story_text)
+    webbrowser.open_new(news_dict["url"][index])
+
+
+listbox = Listbox(reading_contents, width=80, height=len(news_dict["text"]), font=selected_font, bg=CREAM, bd=1)
+listbox.bind("<<ListboxSelect>>", select_story)
+listbox.pack()
 
 
 def reading_window_open():
+    global news_dict
     main.withdraw()
     reading_window.deiconify()
 
-    reading_back_frame = Frame(reading_window)
-    reading_back_frame.pack(side=TOP)
+    for key in news_dict.keys():
+        news_dict["text"] = ""
+        news_dict["url"] = ""
 
-    reading_back_btn = Button(readi)
+        listbox.delete(0, END)
 
     url = 'https://www.england.nhs.uk/news/'
     response = requests.get(url)
@@ -417,8 +443,6 @@ def reading_window_open():
     news_dict = {"text": [],
                  "url": []
                  }
-    listbox = Listbox(reading_window, width=100, height=len(news_dict["text"]))
-    listbox.grid(row=0, column=0)
 
     results = soup.find_all("article", attrs={"class": "post group"})
     for item in results:
@@ -427,9 +451,7 @@ def reading_window_open():
             news_dict["text"].append(line.get_text())
             news_dict["url"].append(line.find('a').get('href'))
             listbox.insert(0, line.get_text())
-    first = news_dict["text"][1]
-    print(first)
-    print(news_dict["text"].index(first))
+
 
 prescription_back_btn = Button(prescription_window, text="<--", command=prescription_back)
 prescription_back_btn.place(x=0, y=0)
