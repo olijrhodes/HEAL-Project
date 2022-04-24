@@ -434,23 +434,27 @@ def reading_window_open():
 
         listbox.delete(0, END)
 
-    url = 'https://www.england.nhs.uk/news/'
-    response = requests.get(url)
+    try:
 
-    html = response.content
-    soup = BeautifulSoup(html, "html.parser")
+        url = 'https://www.england.nhs.uk/news/'
+        response = requests.get(url)
 
-    news_dict = {"text": [],
-                 "url": []
-                 }
+        html = response.content
+        soup = BeautifulSoup(html, "html.parser")
 
-    results = soup.find_all("article", attrs={"class": "post group"})
-    for item in results:
-        header = item.find_all("h2")
-        for line in header:
-            news_dict["text"].append(line.get_text())
-            news_dict["url"].append(line.find('a').get('href'))
-            listbox.insert(0, line.get_text())
+        news_dict = {"text": [],
+                     "url": []
+                     }
+
+        results = soup.find_all("article", attrs={"class": "post group"})
+        for item in results:
+            header = item.find_all("h2")
+            for line in header:
+                news_dict["text"].append(line.get_text())
+                news_dict["url"].append(line.find('a').get('href'))
+                listbox.insert(0, line.get_text())
+    except requests.exceptions.ConnectionError:
+        print("Please connect to internet.")
 
 
 prescription_back_btn = Button(prescription_window, text="\u2190", font=back_font, relief=FLAT, bg=BLUE, fg=CREAM,
