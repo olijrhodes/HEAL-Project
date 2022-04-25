@@ -358,8 +358,17 @@ msg_display = Label(
 )
 msg_display.pack(pady=10)
 
+
+def med_listbox_selected(e):
+    selected_med = medication_listbox.get(medication_listbox.curselection())
+    print(selected_med)
+
+
 medication_listbox = Listbox(prescription_window, font=selected_font, width=100, height=46, bg=CREAM)
 medication_listbox.place(x=50, y=155, width=500, height=400)
+medication_listbox.bind("<<ListboxSelect>>", med_listbox_selected)
+
+nameLabel = Label(prescription_window, bg='cyan4', fg='white', font=selected_font)
 
 
 def prescription_window_open():
@@ -376,7 +385,6 @@ def prescription_window_open():
     sur_name = Surname[index].item()
 
     name = "Showing medication for " + first_name + " " + sur_name
-    nameLabel = Label(prescription_window, bg='cyan4', fg='white', font=("Verdana", 17))
     nameLabel.place(x=50, y=50)
     nameLabel.config(text=name)
 
