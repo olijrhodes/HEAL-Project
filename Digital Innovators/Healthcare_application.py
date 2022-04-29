@@ -23,7 +23,7 @@ BLACK = "Black"
 min_w = 50  # Minimum width of the frame
 max_w = 200  # Maximum width of the frame
 cur_width = min_w  # Increasing width of the frame
-expanded = False  # Check if it is completely exanded
+expanded = False  # Check if it is completely expanded
 
 notifier = ToastNotifier()
 
@@ -43,14 +43,14 @@ login_details_Frame = Frame(login_frame, width=400, height=300, bg=CREAM)
 login_details_Frame.pack(pady=(0, 175))
 
 main = Toplevel()  # creating main window
-main.geometry("1100x600")
+main.geometry("700x450")
 main.resizable(False, False)
 main.title("Healthcare Application - Home")
 main.config(bg=BLUE)
 main.withdraw()
 
 setting_window = Toplevel()
-setting_window.geometry("1100x600")
+setting_window.geometry("700x450")
 setting_window.resizable(False, False)
 setting_window.title("Healthcare Application - Settings")
 setting_window.config(bg=BLUE)
@@ -94,9 +94,16 @@ prescription_window.withdraw()
 reading_window = Toplevel()
 reading_window.resizable(False, False)
 reading_window.title("Healthcare Application - Reading")
-reading_window.geometry("700x400")
+reading_window.geometry("700x450")
 reading_window.config(bg=BLUE)
 reading_window.withdraw()
+
+appointment_window = Toplevel()
+appointment_window.resizable(False, False)
+appointment_window.title("Healthcare Application - View Appointments")
+appointment_window.geometry("700x450")
+appointment_window.config(bg=BLUE)
+appointment_window.withdraw()
 
 checkInt = IntVar()  # creating the check button's integer variable to live update the value
 checkInt.set(0)  # setting the IntVar to 0 by default
@@ -142,8 +149,6 @@ def setting_btn_off():
 def check_login_details():
     searching = dataframe.loc[dataframe["first_name"] + dataframe["last_name"] == firstname.get() + lastname.get()]
     index = searching.index
-    print(index)
-    print(searching)
 
     Lastname = dataframe["last_name"]
     Address = dataframe["street_address"]
@@ -266,9 +271,28 @@ def show_booking_page():
     booking_window.deiconify()
 
 
+def show_view_appointment():
+    booking_selection.withdraw()
+    appointment_window.deiconify()
+
+
 book_appointment_button = Button(booking_selection, text="Book an appointment", justify=CENTER, height=4, width=25,
                                  command=show_booking_page)
 book_appointment_button.pack(pady=(25, 0))
+
+show_appointment_btn = Button(booking_selection, text="View Appointments", justify=CENTER, height=4, width=25,
+                              command=show_view_appointment)
+show_appointment_btn.place(y=165, x=155)
+
+
+def wiew_appointment_back():
+    appointment_window.withdraw()
+    booking_selection.deiconify()
+
+
+view_appointment_back_btn = Button(appointment_window, text="\u2190", font=back_font, relief=FLAT, bg=BLUE, fg=CREAM,
+                                   command=wiew_appointment_back)
+view_appointment_back_btn.grid(row=0, column=0)
 
 
 def display_msg():
@@ -277,6 +301,15 @@ def display_msg():
     h = sec_hour.get()
     # s = sec.get()
     t = f"Your appointment is booked for {date} at {m}:{h}."
+
+    dataframe.loc[dataframe[dataframe["first_name"] + dataframe[
+        "last_name"] == firstname.get() + lastname.get()].index.values, "AP_Date"] = date
+    dataframe.loc[dataframe[dataframe["first_name"] + dataframe[
+        "last_name"] == firstname.get() + lastname.get()].index.values, "AP_Time"] = h+m
+
+    print(date , m + h)
+    dataframe.to_csv("MOCK_DATA.csv")
+
     msg_display.config(text=t)
 
 
@@ -357,6 +390,10 @@ msg_display = Label(
     bg=BLUE
 )
 msg_display.pack(pady=10)
+
+
+def view_appointments():
+    pass
 
 
 def med_listbox_selected(e):
@@ -470,6 +507,7 @@ prescription_back_btn = Button(prescription_window, text="\u2190", font=back_fon
 
 prescription_back_btn.place(x=0, y=0)
 
+
 # first time login page
 
 
@@ -531,6 +569,13 @@ config_notifications = Button(setting_window, text="Configure Notifications", wi
 
 config_notifications.grid(row=3, column=0)
 
+# Define the icons to be shown and resize it
+booking_icon = ImageTk.PhotoImage(Image.open('Images/booking.png').resize((40, 40), Image.ANTIALIAS))
+reading_icon = ImageTk.PhotoImage(Image.open('Images/newspaper.png').resize((40, 40), Image.ANTIALIAS))
+medication_icon = ImageTk.PhotoImage(Image.open('Images/medication.png').resize((40, 40), Image.ANTIALIAS))
+chat_icon = ImageTk.PhotoImage(Image.open('Images/chat.png').resize((40, 40), Image.ANTIALIAS))
+settings_icon = ImageTk.PhotoImage(Image.open('Images/settings.png').resize((40, 40), Image.ANTIALIAS))
+
 
 def expand():
     global cur_width, expanded
@@ -538,7 +583,7 @@ def expand():
     rep = main.after(5, expand)  # Repeat this func every 5 ms
     frame.config(width=cur_width)  # Change the width to new increase width
     if cur_width >= max_w:  # If width is greater than maximum width
-        expanded = True  # Frame is expended
+        expanded = True  # Frame is expanded
         main.after_cancel(rep)  # Stop repeating the func
         fill()
 
@@ -563,30 +608,23 @@ def fill():
         settings_btn.config(text='settings', image='', font=selected_font, width=15)
     else:
         # Bring the image back
-        booking_btn.config(image=booking_icon, font=selected_font, width=15)
-        reading_btn.config(image=reading_icon, font=selected_font, width=15)
-        medication_btn.config(image=medication_icon, font=selected_font, width=15)
-        chat_btn.config(image=chat_icon, font=selected_font, width=15)
-        settings_btn.config(image=settings_icon, font=selected_font, width=15)
+        booking_btn.config(image=booking_icon, font=selected_font, width=37)
+        reading_btn.config(image=reading_icon, font=selected_font, width=37)
+        medication_btn.config(image=medication_icon, font=selected_font, width=37)
+        chat_btn.config(image=chat_icon, font=selected_font, width=37)
+        settings_btn.config(image=settings_icon, font=selected_font, width=37)
 
-
-# Define the icons to be shown and resize it
-booking_icon = ImageTk.PhotoImage(Image.open('Images/booking.png').resize((40, 40), Image.ANTIALIAS))
-reading_icon = ImageTk.PhotoImage(Image.open('Images/reading.png').resize((40, 40), Image.ANTIALIAS))
-medication_icon = ImageTk.PhotoImage(Image.open('Images/medication.png').resize((40, 40), Image.ANTIALIAS))
-chat_icon = ImageTk.PhotoImage(Image.open('Images/chat.png').resize((40, 40), Image.ANTIALIAS))
-settings_icon = ImageTk.PhotoImage(Image.open('Images/settings.png').resize((40, 40), Image.ANTIALIAS))
 
 main.update()  # For the width to get updated
 frame = Frame(main, bg=CREAM, width=50, height=main.winfo_height())
 frame.grid(row=0, column=0)
 
 # Make the buttons with the icons to be shown
-booking_btn = Button(frame, image=booking_icon, bg=CREAM, relief='flat', command=show_booking_selection)
-reading_btn = Button(frame, image=reading_icon, bg=CREAM, relief='flat', command=reading_window_open)
-medication_btn = Button(frame, image=medication_icon, bg=CREAM, relief='flat', command=prescription_window_open)
-chat_btn = Button(frame, image=chat_icon, bg=CREAM, relief='flat')
-settings_btn = Button(frame, image=settings_icon, bg=CREAM, relief='flat', command=setting_btn_on)
+booking_btn = Button(frame, image=booking_icon, bg=CREAM, command=show_booking_selection, relief=GROOVE)
+reading_btn = Button(frame, image=reading_icon, bg=CREAM, command=reading_window_open, relief=GROOVE)
+medication_btn = Button(frame, image=medication_icon, bg=CREAM, command=prescription_window_open, relief=GROOVE)
+chat_btn = Button(frame, image=chat_icon, bg=CREAM, relief=GROOVE)
+settings_btn = Button(frame, image=settings_icon, command=setting_btn_on, relief=GROOVE)
 
 # Put them on the frame
 booking_btn.grid(row=0, column=0, pady=(20, 20))
@@ -651,7 +689,7 @@ def LowContrast():  # creating a block to change the background to blue and the 
         label.config(bg=BLUE, fg=CREAM)
 
 
-accessButton = Button(setting_window,  # generic test button
+accessButton = Button(setting_window,
                       textvariable=contrastMode,
                       bg=CREAM, relief=RAISED, command=ContrastCheck, width=20)
 accessButton.grid(row=1, column=0)
