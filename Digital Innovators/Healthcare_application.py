@@ -428,7 +428,7 @@ def prescription_window_open():
     Medication = dataframe["med1"]
     medication = Medication[index].item()
     str_medication = str(medication)
-    split_medication = str_medication.split(',')
+    split_medication = str_medication.split(' ')
     for item in split_medication:
         medication_listbox.insert("end", item)
 
@@ -617,7 +617,7 @@ def fill():
 
 main.update()  # For the width to get updated
 frame = Frame(main, bg=CREAM, width=50, height=main.winfo_height())
-frame.grid(row=0, column=0)
+frame.pack(side=TOP, anchor=NW)
 
 # Make the buttons with the icons to be shown
 booking_btn = Button(frame, image=booking_icon, bg=CREAM, command=show_booking_selection, relief=GROOVE)
@@ -639,6 +639,9 @@ frame.bind('<Leave>', lambda e: contract())
 
 # So that it does not depend on the widgets inside the frame
 frame.grid_propagate(False)
+
+welcome = Label(main, text="Welcome To HEAL", font=title_font, bg=BLUE, fg=CREAM)
+welcome.place(x=290, y=210)
 
 
 def ContrastCheck():  # checking whether to change the accessibility options
